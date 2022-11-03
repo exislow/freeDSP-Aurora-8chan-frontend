@@ -117,7 +117,13 @@ $progress-bar-background-color: $grey-dark;
 $panel-heading-background-color: $grey-dark;
 
 
-
 // custom
+// Workaround https://github.com/jgthms/bulma/issues/2886
+$input-placeholder-color: $grey;
+::placeholder {
+    opacity: 1; // For Firefox.
+}
+
 $modal-content-width: 1000px;
+
 $fa-font-path: '@fortawesome/fontawesome-free/webfonts';

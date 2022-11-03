@@ -1,6 +1,7 @@
 <script>
   import { range } from "./range.js";
   import ConfigSpdif from "./ConfigSpdif.svelte";
+  import ModalChartGeneric from "./ModalChartGeneric.svelte";
 
   const configSoundProc = {
     countChannel: 8,
@@ -83,7 +84,7 @@
             <div class="select">
               <select>
                 {#each Object.entries(configChannelSource) as [id, name]}
-                  <option option="{id}">{name}</option>
+                  <option value="{id}">{name}</option>
                 {/each}
               </select>
             </div>
@@ -91,12 +92,15 @@
           {#each Object.entries(configSoundProc.soundBlocks) as [name, definition]}
             <div class="column">
               <div class="field has-addons">
-                  <button class="button is-fullwidth {definition.color} js-modal-trigger" data-target="modal-chart-generic">{definition.name}</button>
-                  <button class="button is-danger is-outlined">
+                <button class="button is-fullwidth {definition.color} js-modal-trigger is-multiline"
+                        data-target="modal-chart-generic"><span><span>{definition.name}</span><br /><span
+                  class="is-size-7 is-family-code">aa</span></span>
+                </button>
+                <button class="button is-danger is-outlined is-multiline">
                     <span class="icon is-small">
                       <i class="fas fa-volume-off"></i>
                     </span>
-                  </button>
+                </button>
               </div>
             </div>
           {/each}
@@ -117,26 +121,11 @@
 </div>
 
 <ConfigSpdif outputGeneric={configChannelSource} />
+<ModalChartGeneric />
 
-<div id="modal-chart-generic" class="modal">
-  <div class="modal-background" />
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">HEADER</p>
-      <button class="delete" aria-label="close" />
-    </header>
-
-    <section class="modal-card-body">
-      <div class="columns">
-        <div class="column">
-          <p>Ybla.</p>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-
-        </div>
-      </div>
-    </section>
-  </div>
-</div>
+<style>
+    .button.is-multiline {
+        min-height: 2.25em;
+        height: auto;
+    }
+</style>

@@ -109,7 +109,7 @@
         </div>
 
         <footer class="card-footer">
-          <button class="button card-footer-item">Save</button>
+          <button class="button card-footer-item is-primary">Save</button>
         </footer>
       </div>
 
@@ -130,7 +130,7 @@
                     <label class="label">{itemsValue.name}</label>
 
                     <div class="control">
-                      <input class="input" type="text" placeholder="valueItems.name">
+                      <input class="input" type="text" placeholder="{itemsValue.name}">
                     </div>
                   </div>
                 </div>
@@ -140,7 +140,7 @@
         </div>
 
         <footer class="card-footer">
-          <button class="button card-footer-item">Save</button>
+          <button class="button card-footer-item is-primary">Save</button>
         </footer>
       </div>
         {/each}
