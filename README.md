@@ -16,7 +16,7 @@ npm create svelte@latest my-app
 
 For Bulma follow: https://github.com/svelte-add/bulma
 
-For Bulma theming follow: https://jenil.github.io/bulmaswatch/superhero/
+For Bulma theming follow: https://jenil.github.io/bulmaswatch/darkly/
 
 ## Developing
 
