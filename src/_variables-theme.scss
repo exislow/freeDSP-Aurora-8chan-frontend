@@ -118,6 +118,7 @@ $panel-heading-background-color: $grey-dark;
 
 
 // custom
+$button-static-color: $grey-dark !default;
 // Workaround https://github.com/jgthms/bulma/issues/2886
 $input-placeholder-color: $grey;
 ::placeholder {

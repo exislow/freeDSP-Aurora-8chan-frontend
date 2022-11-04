@@ -94,7 +94,7 @@
               <div class="field has-addons">
                 <button class="button is-fullwidth {definition.color} js-modal-trigger is-multiline"
                         data-target="modal-chart-generic"><span><span>{definition.name}</span><br /><span
-                  class="is-size-7 is-family-code">aa</span></span>
+                  class="is-size-7 is-family-code">1700 Hz</span></span>
                 </button>
                 <button class="button is-danger is-outlined is-multiline">
                     <span class="icon is-small">
@@ -105,7 +105,10 @@
             </div>
           {/each}
           <div class="column">
-            <strong>Out {num + 1}</strong>
+            <button class="button is-static">
+              Out {num + 1}
+            </button>
+            <strong></strong>
           </div>
         </div>
       {/each}
