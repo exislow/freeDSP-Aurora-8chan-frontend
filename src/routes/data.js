@@ -36,5 +36,11 @@ export const cOptions = {
       bodyColor: "rgba(0, 0, 0)"
     }
   },
-  animation: false
+  animation: false,
+  interaction: {
+    intersect: false,
+    mode: "index"
+  },
+  spanGaps: true,
+  locale: "en-US"
 };
