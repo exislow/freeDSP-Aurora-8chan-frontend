@@ -15,6 +15,7 @@ export const transferFunction = {
         // Then we add the value to the dataset data
         data.datasets[i].data.push(y);
       }
+
       console.log(data.datasets[i].data);
     }
   }

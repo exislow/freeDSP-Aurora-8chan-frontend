@@ -93,23 +93,23 @@
     dat.push({ "w": aa[0][i], "mag": magnitudes[i], "ph": phs[i] });
   }
 
-  console.log(aa[0], magnitudes);
+  console.log(logspace(-2, 4.305, 1000));
 
   export const cData = {
-    labels: logspace(1, 4.305, 1000),
+    labels: logspace(-1, 4.305, 1000),
     datasets: [
       {
         label: "Level [dB]",
         data: [],
         function: function (f) {
-          const s = 1 * f * 2 * Math.PI;
-          function H_Bessel(s) {
-            return 15 / (mathjs.pow(s, 3) + 6 * mathjs.pow(s, 2) + 15 * (s) + 15);
-          }
+          // Bessel 3rd order
+          const transfer_function = mathjs.parse('15 / (s^3 + (6 * s^2) + (15 * s) + 15)')
+          const compiled_tf = transfer_function.compile()
+          const magnitude = compiled_tf.eval({s: mathjs.complex(0, f)}).toPolar().r
           // abs will remove the phase information and give us the amplitude response
-          const a = mathjs.abs(H_Bessel(s));
+          const magnitude_abs = mathjs.abs(magnitude);
           // converting the amplitude to dB
-          const y = 20 * mathjs.log10(a);
+          const y = 20 * mathjs.log10(magnitude_abs);
 
           return y;
         },
