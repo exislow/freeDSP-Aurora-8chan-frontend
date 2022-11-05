@@ -15,12 +15,12 @@
     Title,
     Tooltip
   } from "chart.js";
-  import { canvasBgColor, transferFunction } from "./chartJsPlugin.js";
+  import { canvasBgColor, transferFunction , cursorVerticalLine } from "./chartJsPlugin.js";
 
   const config = {};
   const mathjs = create(all, config);
 
-  ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor);
+  ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, transferFunction, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
   ChartJS.defaults.borderColor = "#718096";
   ChartJS.defaults.color = "#b8c1cf";
@@ -58,8 +58,8 @@
     var min_f = (mathjs.log10(mathjs.min(mathjs.abs(reals))));
     var max_f = (mathjs.log10(mathjs.max(mathjs.abs(reals))));
 
-    var f = logspace(min_f - 3, max_f + 3, 500);
-    //var f = logspace(1, 4.305, 1000);
+    //var f = logspace(min_f - 3, max_f + 3, 500);
+    var f = logspace(1, 4.305, 1000);
 
     var fc = f.map(complexify);
 
@@ -96,14 +96,13 @@
   console.log(aa[0], magnitudes);
 
   export const cData = {
-    labels: aa[0], //logspace(1, 4.305, 1000),
+    labels: logspace(1, 4.305, 1000),
     datasets: [
       {
         label: "Level [dB]",
-        data: magnitudes, //[],
-        /*
+        data: [],
         function: function (f) {
-          const s = 1 * 20 * f * 2 * Math.PI;
+          const s = 1 * f * 2 * Math.PI;
           function H_Bessel(s) {
             return 15 / (mathjs.pow(s, 3) + 6 * mathjs.pow(s, 2) + 15 * (s) + 15);
           }
@@ -114,7 +113,6 @@
 
           return y;
         },
-         */
         borderColor: "rgb(228, 131, 18)",
         backgroundColor: "rgba(228, 131, 18, 0.5)",
         fill: true,
