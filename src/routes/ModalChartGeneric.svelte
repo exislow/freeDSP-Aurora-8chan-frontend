@@ -103,13 +103,11 @@
         data: [],
         function: function (f) {
           // Bessel 3rd order
-          const transfer_function = mathjs.parse('15 / (s^3 + (6 * s^2) + (15 * s) + 15)')
+          const transfer_function = mathjs.parse('15 / ((s/1256.63)^3 + (6 * (s/1256.63)^2) + (15 * (s/1256.63)) + 15)')
           const compiled_tf = transfer_function.compile()
-          const magnitude = compiled_tf.eval({s: mathjs.complex(0, f)}).toPolar().r
-          // abs will remove the phase information and give us the amplitude response
-          const magnitude_abs = mathjs.abs(magnitude);
+          const magnitude = compiled_tf.eval({s: mathjs.complex(0, f * 2 * Math.PI)}).toPolar().r
           // converting the amplitude to dB
-          const y = 20 * mathjs.log10(magnitude_abs);
+          const y = 20 * mathjs.log10(magnitude);
 
           return y;
         },

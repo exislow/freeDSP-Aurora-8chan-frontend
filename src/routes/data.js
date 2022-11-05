@@ -24,7 +24,7 @@ export const cOptions = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top"
+      display: false
     },
     title: {
       display: true,
@@ -33,7 +33,32 @@ export const cOptions = {
     tooltip: {
       backgroundColor: "rgba(255, 255, 255)",
       titleColor: "rgba(0, 0, 0)",
-      bodyColor: "rgba(0, 0, 0)"
+      bodyColor: "rgba(0, 0, 0)",
+      callbacks: {
+        label: function (context) {
+          let item;
+
+          if (Array.isArray(context)) {
+            item = context[0];
+          } else {
+            item = context;
+          }
+
+          const format_x = new Intl.NumberFormat("en-US").format(
+            Math.round(item.parsed.x * 100) / 100
+          );
+          const format_y = new Intl.NumberFormat("en-US").format(
+            Math.round(item.parsed.y * 100) / 100
+          );
+
+          let content = `${format_y} dB at ${format_x} Hz`;
+
+          return content;
+        },
+        title: () => {
+          return "";
+        }
+      }
     }
   },
   animation: false,
