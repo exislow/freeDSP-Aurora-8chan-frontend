@@ -1,7 +1,7 @@
 <script>
   import { Line } from "svelte-chartjs";
   import { cOptions } from "./data.js";
-  import { findRoots, logspace } from "./helperTransitionFunction.js";
+  import { logspace } from "./helperTransitionFunction.js";
   import { all, create } from "mathjs";
   import {
     CategoryScale,
@@ -38,62 +38,6 @@
     9: "Linkwitz-Riley 36",
     10: "Linkwitz-Riley 48"
   };
-
-  const frequency = [10, 105, 1005, 5010, 10005, 12004, 20000];
-
-
-  export function calculateTransitionFunction(num, den) {
-    function complexify(nARR) {
-      return mathjs.complex(0, nARR);
-    }
-
-    var rnum = findRoots(num);
-    var rden = findRoots(den);
-    if (rnum[0] === undefined) {
-      var reals = rden[0];
-    } else {
-      var reals = rnum[0].concat(rden[0]);
-    }
-
-    var min_f = (mathjs.log10(mathjs.min(mathjs.abs(reals))));
-    var max_f = (mathjs.log10(mathjs.max(mathjs.abs(reals))));
-
-    //var f = logspace(min_f - 3, max_f + 3, 500);
-    var f = logspace(1, 4.305, 1000);
-
-    var fc = f.map(complexify);
-
-    function compute_num(element, index, array) {
-      num_computed = mathjs.add(num_computed, mathjs.dotMultiply(mathjs.dotPow(fc, index), num[index]));
-    }
-
-    function compute_den(element, index, array) {
-      den_computed = mathjs.add(den_computed, mathjs.dotMultiply(mathjs.dotPow(fc, index), den[index]));
-    }
-
-    var num_computed = mathjs.multiply(fc, 0);
-    num.forEach(compute_num);
-
-    var den_computed = mathjs.multiply(fc, 0);
-    den.forEach(compute_den);
-
-    var respuesta = mathjs.dotDivide(num_computed, den_computed);
-
-    return [f, respuesta];
-  };
-
-  let aa = calculateTransitionFunction([15], [1, 6, 15, 15]);
-
-  var dat = [];
-  var magnitudes = mathjs.dotMultiply(20, mathjs.log10(mathjs.abs(aa[1])));
-  var phs = mathjs.dotMultiply(180 / mathjs.pi, mathjs.arg(aa[1]));
-
-
-  for (let i = 0; i < aa[0].length; i++) {
-    dat.push({ "w": aa[0][i], "mag": magnitudes[i], "ph": phs[i] });
-  }
-
-  console.log(logspace(-2, 4.305, 1000));
 
   export const cData = {
     labels: logspace(-1, 4.305, 1000),

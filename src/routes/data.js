@@ -3,8 +3,8 @@ export const cOptions = {
     x: {
       display: true,
       type: "logarithmic",
-      //min: 10,
-      //max: 20000,
+      min: 1,
+      max: 20000,
       title: {
         display: true,
         text: "Frequency [Hz]"
