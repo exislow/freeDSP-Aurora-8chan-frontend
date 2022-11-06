@@ -1,7 +1,6 @@
 <script>
   import { Line } from "svelte-chartjs";
   import { cOptions } from "../data.js";
-  import { logspace } from "../helper/transitionFunction.js";
   import { all, create } from "mathjs";
   import {
     CategoryScale,
@@ -17,6 +16,7 @@
   } from "chart.js";
   import { canvasBgColor , cursorVerticalLine } from "../chartJsPlugin.js";
   import Fili from "fili";
+  import { logspace } from "../helper/range.js";
 
   const config = {};
 
