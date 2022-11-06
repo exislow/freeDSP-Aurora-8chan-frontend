@@ -1,7 +1,7 @@
 <script>
   import { range } from "./helper/range.js";
-  import ConfigSpdif from "./ConfigSpdif.svelte";
-  import ModalChartGeneric from "./ModalChartGeneric.svelte";
+  import ConfigSpdif from "./module/ConfigSpdif.svelte";
+  import ModalChartGeneric from "./modal/ModalChartGeneric.svelte";
 
   const configSoundProc = {
     countChannel: 8,

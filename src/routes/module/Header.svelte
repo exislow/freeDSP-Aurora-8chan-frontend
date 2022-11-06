@@ -1,6 +1,6 @@
 <script>
-  import DeviceConfig from './ModalConfigDevice.svelte';
-  import Preset from './ModalPreset.svelte';
+  import DeviceConfig from '../modal/ModalConfigDevice.svelte';
+  import Preset from '../modal/ModalPreset.svelte';
   import {onMount} from 'svelte';
 
   onMount(() => {

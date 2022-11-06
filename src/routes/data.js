@@ -3,7 +3,7 @@ export const cOptions = {
     x: {
       display: true,
       type: "logarithmic",
-      min: 1,
+      min: 10,
       max: 20000,
       title: {
         display: true,
@@ -12,8 +12,8 @@ export const cOptions = {
     },
     y: {
       display: true,
-      //min: -20,
-      //max: +20,
+      min: -20,
+      max: +20,
       title: {
         display: true,
         text: "Level [dB]"
