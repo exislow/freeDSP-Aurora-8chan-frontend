@@ -1,7 +1,7 @@
 <script>
   import { Line } from "svelte-chartjs";
   import { cOptions } from "./data.js";
-  import { logspace } from "./helperTransitionFunction.js";
+  import { logspace } from "./helper/transitionFunction.js";
   import { all, create } from "mathjs";
   import {
     CategoryScale,
@@ -15,12 +15,12 @@
     Title,
     Tooltip
   } from "chart.js";
-  import { canvasBgColor, transferFunction , cursorVerticalLine } from "./chartJsPlugin.js";
+  import { canvasBgColor , cursorVerticalLine } from "./chartJsPlugin.js";
 
   const config = {};
   const mathjs = create(all, config);
 
-  ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, transferFunction, cursorVerticalLine);
+  ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
   ChartJS.defaults.borderColor = "#718096";
   ChartJS.defaults.color = "#b8c1cf";
@@ -39,12 +39,15 @@
     10: "Linkwitz-Riley 48"
   };
 
+  const labels = logspace(-1, 4.305, 1000);
+
   export const cData = {
-    labels: logspace(-1, 4.305, 1000),
+    labels: labels,
     datasets: [
       {
         label: "Level [dB]",
-        data: [],
+        data: [1],
+        /*
         function: function (f) {
           // Bessel 3rd order
           const transfer_function = mathjs.parse('15 / ((s/1256.63)^3 + (6 * (s/1256.63)^2) + (15 * (s/1256.63)) + 15)')
@@ -55,6 +58,8 @@
 
           return y;
         },
+
+         */
         borderColor: "rgb(228, 131, 18)",
         backgroundColor: "rgba(228, 131, 18, 0.5)",
         fill: true,

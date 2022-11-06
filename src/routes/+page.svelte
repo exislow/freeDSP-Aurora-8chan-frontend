@@ -1,5 +1,5 @@
 <script>
-  import { range } from "./range.js";
+  import { range } from "./helper/range.js";
   import ConfigSpdif from "./ConfigSpdif.svelte";
   import ModalChartGeneric from "./ModalChartGeneric.svelte";
 
