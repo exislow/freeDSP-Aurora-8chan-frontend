@@ -1,7 +1,5 @@
 <script>
   import { Line } from "svelte-chartjs";
-  import { cOptions } from "../data.js";
-  import { all, create } from "mathjs";
   import {
     CategoryScale,
     Chart as ChartJS,
@@ -14,11 +12,11 @@
     Title,
     Tooltip
   } from "chart.js";
-  import { canvasBgColor , cursorVerticalLine } from "../chartJsPlugin.js";
+  import { canvasBgColor, cOptions, cursorVerticalLine } from "../helper/chartJs.js";
   import Fili from "fili";
   import { logspace } from "../helper/range.js";
 
-  const config = {};
+  export let filter;
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
