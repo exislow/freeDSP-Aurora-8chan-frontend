@@ -1,16 +1,19 @@
 <script>
-  import { hardware } from "../helper/constants.js";
-  import { onMount } from "svelte";
+  import { hardware, modal } from "../helper/constants.js";
+  import { modalClose } from "../helper/modal.js";
+  import { handleKeydown} from "../helper/modal.js";
+  import { onDestroy } from "svelte";
 
   export let configDevice = {};
   export let configWifi = {};
-  const idModal = "modal-config-device";
+  let thisModal;
+  const previouslyFocused = typeof document !== 'undefined' && document.activeElement;
 
-  onMount(function () {
-    document.addEventListener(idModal, () => {
-      console.log('Aaa')
+  if (previouslyFocused) {
+    onDestroy(() => {
+      previouslyFocused.focus();
     });
-  })
+  }
 
   const wifiConnect = {
     name: "Wi-Fi Connect",
@@ -29,7 +32,7 @@
 
   const wifiAp = {
     name: "Wi-Fi Access Point",
-    fnUpdate: updateWifiConnect,
+    fnUpdate: updateWifiAp,
     form: [
       {
         name: "Local SSID",
@@ -51,25 +54,27 @@
     volumePotentiometer: configDevice.vpot ? "1" : "0"
   };
 
-  function updateStateDevice(setting, value) {
-    console.log('UPDATE');
-    $: stateDevice[setting] = value;
-  }
-
-  function updateWifiConnect(event) {
+  function updateWifiConnect() {
     // implement post
     // if 200
-    console.log(event)
     configWifi.ssid = wifiConnect.form[0].value;
+  }
+
+  function updateWifiAp() {
+    // implement post
+    // if 200
+    configWifi.apname = wifiAp.form[0].value;
   }
 </script>
 
-<div class="modal" id="{idModal}">
-  <div class="modal-background" />
+<svelte:window on:keydown={(event) => handleKeydown(thisModal, event)}/>
+
+<div class="modal is-active" id="{modal.configDevice}" aria-modal="true" bind:this={thisModal}>
+  <div class="modal-background" on:click={modalClose} />
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title">Device Config</p>
-      <button aria-label="close" class="delete" />
+      <button aria-label="close" class="delete" on:click={modalClose} />
     </header>
 
     <section class="modal-card-body">
@@ -109,7 +114,7 @@
         </footer>
       </div>
 
-      {#each wifi as itemWifi, index (itemWifi)}
+      {#each wifi as itemWifi, index (index)}
         <div class="card block">
           <header class="card-header">
             <p class="card-header-title">
@@ -117,7 +122,7 @@
             </p>
           </header>
 
-          <form on:submit|preventDefault={updateWifiConnect}>
+          <form on:submit|preventDefault={itemWifi.fnUpdate}>
           <div class="card-content">
             <div class="content">
               <div class="columns">

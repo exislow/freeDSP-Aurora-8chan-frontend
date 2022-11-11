@@ -1,5 +1,6 @@
 <script>
-  import { openModal } from "../helper/modal.js";
+  import { modalOpen } from "../helper/modal.js";
+  import { modal } from "../helper/constants.js";
 </script>
 
 <header>
@@ -18,8 +19,8 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-config-device" on:click={(event) => openModal(event.target.dataset.target)}>Device</button>
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-preset" on:click={(event) => openModal(event.target.dataset.target)}>Preset</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.configDevice}" on:click={(event) => modalOpen(event.target.dataset.target)}>Device</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.preset}" on:click={(event) => modalOpen(event.target.dataset.target)}>Preset</button>
             <a href="/chnames.html" class="button navbar-item has-text-weight-bold">Names</a>
           </div>
         </div>
