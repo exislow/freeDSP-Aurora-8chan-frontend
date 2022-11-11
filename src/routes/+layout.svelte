@@ -2,18 +2,15 @@
   import "../app.scss";
   import Header from "./module/Header.svelte";
   import Footer from "./module/Footer.svelte";
-  import DeviceConfig from './modal/ModalConfigDevice.svelte';
-  import Preset from './modal/ModalPreset.svelte';
   import OverlayLoading from "./module/OverlayLoading.svelte";
-  import { activeModal } from "./helper/store.js";
-  import { modal } from "./helper/constants.js";
+  import { activeModal, apiLoading } from "./helper/store.js";
+  import ModalFactory from "./modal/ModalFactory.svelte";
 
-  let apiLoading = true;
   /** @type {import('./$types').LayoutData} */
   export let data;
 
   $: {
-    apiLoading = typeof data == "object" ? false : true
+    $apiLoading = typeof data == "object" ? false : true
   }
 </script>
 
@@ -26,12 +23,12 @@
   {:then value}
     <!-- promise was fulfilled -->
     <slot />
-    {#if $activeModal === modal.configDevice }
-      <DeviceConfig bind:configDevice={data.configDevice} bind:configWifi={data.configWifi} />
-    {/if}
+
     <Footer bind:configDevice={data.configDevice} />
-    <Preset />
-    <OverlayLoading bind:apiLoading />
+    {#if $activeModal }
+      <ModalFactory bind:activeModal={$activeModal} bind:configDevice={data.configDevice} bind:configWifi={data.configWifi} />
+    {/if}
+    <OverlayLoading bind:apiLoading={$apiLoading} />
   {:catch error}
     <!-- promise was rejected -->
     <p>Something went wrong: {error.message}</p>

@@ -17,9 +17,18 @@ export const configSite = {
 };
 
 export const modal = {
-  configDevice: "modal-config-device",
-  preset: "modal-preset",
-  chartGeneric: "modal-chart-generic"
+  configDevice: {
+    id: "modal-config-device",
+    name: "Device Config"
+  },
+  preset: {
+    id: "modal-preset",
+    name: "Preset"
+  },
+  chartGeneric: {
+    id: "modal-chart-generic",
+    name: "tbd"
+  }
 };
 
 export const hardware = {

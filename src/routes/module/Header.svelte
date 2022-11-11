@@ -19,8 +19,8 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.configDevice}" on:click={(event) => modalOpen(event.target.dataset.target)}>Device</button>
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.preset}" on:click={(event) => modalOpen(event.target.dataset.target)}>Preset</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.configDevice.id}" on:click={(event) => modalOpen(event.target.dataset.target)}>Device</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.preset.id}" on:click={(event) => modalOpen(event.target.dataset.target)}>Preset</button>
             <a href="/chnames.html" class="button navbar-item has-text-weight-bold">Names</a>
           </div>
         </div>

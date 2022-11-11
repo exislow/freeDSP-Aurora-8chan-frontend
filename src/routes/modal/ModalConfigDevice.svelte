@@ -1,19 +1,8 @@
 <script>
-  import { hardware, modal } from "../helper/constants.js";
-  import { modalClose } from "../helper/modal.js";
-  import { handleKeydown} from "../helper/modal.js";
-  import { onDestroy } from "svelte";
+  import { hardware } from "../helper/constants.js";
 
   export let configDevice = {};
   export let configWifi = {};
-  let thisModal;
-  const previouslyFocused = typeof document !== 'undefined' && document.activeElement;
-
-  if (previouslyFocused) {
-    onDestroy(() => {
-      previouslyFocused.focus();
-    });
-  }
 
   const wifiConnect = {
     name: "Wi-Fi Connect",
@@ -47,12 +36,20 @@
 
   const wifi = [wifiConnect, wifiAp];
 
-  let stateDevice = {
+  const stateDevice = {
     addon: configDevice.aid.toString(),
     addonSettings: (1).toString(),
     adcSummation: configDevice.adcsum.toString(),
     volumePotentiometer: configDevice.vpot ? "1" : "0"
   };
+
+  function updateDevice() {
+    // implement post
+    // if 200
+    configDevice.aid = parseInt(stateDevice.addon);
+    configDevice.adcsum = parseInt(stateDevice.adcSummation);
+    configDevice.vpot = !!stateDevice.volumePotentiometer;
+  }
 
   function updateWifiConnect() {
     // implement post
@@ -67,87 +64,76 @@
   }
 </script>
 
-<svelte:window on:keydown={(event) => handleKeydown(thisModal, event)}/>
 
-<div class="modal is-active" id="{modal.configDevice}" aria-modal="true" bind:this={thisModal}>
-  <div class="modal-background" on:click={modalClose} />
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Device Config</p>
-      <button aria-label="close" class="delete" on:click={modalClose} />
-    </header>
+<div class="card block">
+  <header class="card-header">
+    <p class="card-header-title">
+      {hardware.name}
+    </p>
+  </header>
 
-    <section class="modal-card-body">
-      <div class="card block">
-        <header class="card-header">
-          <p class="card-header-title">
-            {hardware.name}
-          </p>
-        </header>
+  <form on:submit|preventDefault={updateDevice}>
+    <div class="card-content">
+      <div class="content">
+        <div class="columns">
+          {#each Object.entries(hardware.value) as [idValue, itemsValue] (idValue)}
+            <div class="column">
+              <div class="field is-small">
+                <label class="label">{itemsValue.name}</label>
 
-        <div class="card-content">
-          <div class="content">
-            <div class="columns">
-              {#each Object.entries(hardware.value) as [idValue, itemsValue] (idValue)}
-                <div class="column">
-                  <div class="field is-small">
-                    <label class="label">{itemsValue.name}</label>
-
-                    <div class="control">
-                      <div class="select is-normal is-fullwidth">
-                        <select bind:value={ stateDevice[idValue] } id="{idValue}">
-                          {#each Object.entries(itemsValue.value) as [id, value] (id)}
-                            <option value={id}>{value}</option>
-                          {/each}
-                        </select>
-                      </div>
-                    </div>
+                <div class="control">
+                  <div class="select is-normal is-fullwidth">
+                    <select bind:value={ stateDevice[idValue] } id="{idValue}">
+                      {#each Object.entries(itemsValue.value) as [id, value] (id)}
+                        <option value={id}>{value}</option>
+                      {/each}
+                    </select>
                   </div>
                 </div>
-              {/each}
-            </div>
-          </div>
-        </div>
-
-        <footer class="card-footer">
-          <button class="button card-footer-item is-primary">Save</button>
-        </footer>
-      </div>
-
-      {#each wifi as itemWifi, index (index)}
-        <div class="card block">
-          <header class="card-header">
-            <p class="card-header-title">
-              {itemWifi.name}
-            </p>
-          </header>
-
-          <form on:submit|preventDefault={itemWifi.fnUpdate}>
-          <div class="card-content">
-            <div class="content">
-              <div class="columns">
-                {#each itemWifi.form as itemsValue, index (itemsValue)}
-                  <div class="column">
-                    <div class="field is-small">
-                      <label class="label">{itemsValue.name}</label>
-
-                      <div class="control">
-                        <input class="input" type="text" placeholder="{itemsValue.name}" bind:value={itemsValue.value}>
-                      </div>
-                    </div>
-                  </div>
-                {/each}
               </div>
             </div>
-          </div>
-
-          <footer class="card-footer">
-            <button class="button card-footer-item is-primary" type="submit">Save</button>
-          </footer>
-
-          </form>
+          {/each}
         </div>
-      {/each}
-    </section>
-  </div>
+      </div>
+    </div>
+
+  <footer class="card-footer">
+    <button class="button card-footer-item is-primary" type="submit">Save</button>
+  </footer>
+  </form>
 </div>
+
+{#each wifi as itemWifi, index (index)}
+  <div class="card block">
+    <header class="card-header">
+      <p class="card-header-title">
+        {itemWifi.name}
+      </p>
+    </header>
+
+    <form on:submit|preventDefault={itemWifi.fnUpdate}>
+    <div class="card-content">
+      <div class="content">
+        <div class="columns">
+          {#each itemWifi.form as itemsValue, index (itemsValue)}
+            <div class="column">
+              <div class="field is-small">
+                <label class="label">{itemsValue.name}</label>
+
+                <div class="control">
+                  <input class="input" type="text" placeholder="{itemsValue.name}" bind:value={itemsValue.value}>
+                </div>
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    </div>
+
+    <footer class="card-footer">
+      <button class="button card-footer-item is-primary" type="submit">Save</button>
+    </footer>
+
+    </form>
+  </div>
+{/each}
