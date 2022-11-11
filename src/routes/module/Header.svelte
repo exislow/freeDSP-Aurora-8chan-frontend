@@ -1,52 +1,5 @@
 <script>
-  import DeviceConfig from '../modal/ModalConfigDevice.svelte';
-  import Preset from '../modal/ModalPreset.svelte';
-  import {onMount} from 'svelte';
-
-  onMount(() => {
-    // Functions to open and close a modal
-    function openModal(el) {
-      el.classList.add('is-active');
-    }
-
-    function closeModal(el) {
-      el.classList.remove('is-active');
-    }
-
-    function closeAllModals() {
-      (document.querySelectorAll('.modal') || []).forEach((modal) => {
-        closeModal(modal);
-      });
-    }
-
-    // Add a click event on buttons to open a specific modal
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach((trigger) => {
-      const modal = trigger.dataset.target;
-      const target = document.getElementById(modal);
-
-      trigger.addEventListener('click', () => {
-        openModal(target);
-      });
-    });
-
-    // Add a click event on various child elements to close the parent modal
-    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach((close) => {
-      const target = close.closest('.modal');
-
-      close.addEventListener('click', () => {
-        closeModal(target);
-      });
-    });
-
-    // Add a keyboard event to close all modals
-    document.addEventListener('keydown', (event) => {
-      const e = event || window.event;
-
-      if (e.keyCode === 27) { // Escape key
-        closeAllModals();
-      }
-    });
-  });
+  import { openModal } from "../helper/modal.js";
 </script>
 
 <header>
@@ -65,8 +18,8 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-config-device">Device</button>
-            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-preset">Preset</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-config-device" on:click={(event) => openModal(event.target.dataset.target)}>Device</button>
+            <button class="button has-text-weight-bold js-modal-trigger" data-target="modal-preset" on:click={(event) => openModal(event.target.dataset.target)}>Preset</button>
             <a href="/chnames.html" class="button navbar-item has-text-weight-bold">Names</a>
           </div>
         </div>
@@ -74,6 +27,3 @@
     </div>
   </nav>
 </header>
-
-<DeviceConfig />
-<Preset />

@@ -129,7 +129,7 @@
   };
 </script>
 
-<!--
+
 <div id="modal-chart-generic" class="modal">
   <div class="modal-background" />
   <div class="modal-card">
@@ -139,7 +139,7 @@
     </header>
 
     <section class="modal-card-body">
--->
+
 <div class="card">
   <div class="card-content">
     <div class="media">
@@ -166,7 +166,7 @@
             <div class="control">
               <div class="select is-normal is-fullwidth">
                 <select>
-                  {#each Object.entries(configFilter) as [id, values]}
+                  {#each Object.entries(configFilter) as [id, values] (id)}
                     <option value={id}>{values.name}</option>
                   {/each}
                 </select>
@@ -181,8 +181,7 @@
     <button class="button card-footer-item is-primary">Save</button>
   </footer>
 </div>
-<!--
+
     </section>
   </div>
 </div>
--->

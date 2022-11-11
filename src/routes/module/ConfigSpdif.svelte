@@ -1,5 +1,5 @@
 <script>
-  import { apiSpdifout, apiConfig } from "../data.js";
+  import { apiSpdifout, apiConfig } from "../helper/dataDefault.js";
 
   const input = {
     "0x00": "TOSLINK 1",
@@ -56,11 +56,11 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label class="label">S/PDIF Input</label>
+            <label class="label">Input</label>
             <div class="control">
               <div class="select is-fullwidth">
                 <select bind:value={stateSpdif.input.selected}>
-                  {#each Object.entries(input) as [id, name]}
+                  {#each Object.entries(input) as [id, name] (id)}
                     <option value="{id}">{name}</option>
                   {/each}
                 </select>
@@ -69,14 +69,14 @@
           </div>
         </div>
 
-        {#each Object.entries(outputChannel) as [idChannel, valueChannel]}
+        {#each Object.entries(outputChannel) as [idChannel, valueChannel] (idChannel)}
           <div class="column">
             <div class="field">
-              <label class="label">S/PDIF Output {valueChannel.name}</label>
+              <label class="label">Output {valueChannel.name}</label>
               <div class="control">
                 <div class="select is-fullwidth">
                   <select bind:value={ valueChannel.selected } id="{valueChannel.id}">
-                    {#each Object.entries(output) as [id, name]}
+                    {#each Object.entries(output) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}
                   </select>

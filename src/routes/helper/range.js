@@ -64,3 +64,30 @@ export function logspace(a, b, len) {
   arr[end] = Math.pow(10, b);
   return arr;
 }
+
+export function extractFc(idFc, allFc) {
+  const regex = /<h4>(.*)<\/h4>/;
+  const obj = allFc.find((o) => o.name === idFc);
+  let m;
+  let value = "-";
+
+  if (obj && (m = regex.exec(obj.val)) !== null) {
+    // The result can be accessed through the `m`-variable.
+    m.forEach((match) => {
+      value = match;
+    });
+  }
+
+  return value;
+}
+
+export function isBypassActive(idBypass, allBypass) {
+  const obj = allBypass.find((o) => o.name === idBypass);
+  let value = 0;
+
+  if (obj) {
+    value = obj.val;
+  }
+
+  return value;
+}

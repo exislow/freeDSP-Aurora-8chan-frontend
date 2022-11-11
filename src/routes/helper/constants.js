@@ -1,3 +1,21 @@
+import { dev } from "$app/environment";
+
+export const configSite = {
+  api: {
+    url: dev ? "http://localhost:3000" : "",
+    endpoint: {
+      configDevice: "config",
+      spdifOut: "spdifout",
+      audioInput: "allinputs",
+      bypassAll: "allbyp",
+      fcAll: "allfc",
+      volumeMaster: "mvol",
+      channelNames: "allnames",
+      configWifi: "wificonfig"
+    }
+  }
+};
+
 export const hardware = {
   name: "Hardware",
   url: "x",

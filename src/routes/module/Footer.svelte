@@ -1,6 +1,6 @@
 <script>
   import { hardware } from "../helper/constants.js";
-  import { apiConfig } from "../data.js";
+  export let configDevice = {};
 </script>
 
 <footer class="footer">
@@ -10,12 +10,12 @@
         <ul>
           <li>
             Wi-Fi IP Address: <strong class="is-family-monospace has-text-weight-bold is-size-6"
-              >{ apiConfig.ip }</strong
+              >{ configDevice.ip }</strong
             >
           </li>
           <li>
             Installed Addon: <strong class="is-family-monospace has-text-weight-bold is-size-6"
-              >{ hardware.value.addon.value[apiConfig.aid] }</strong
+              >{ hardware.value.addon.value[configDevice.aid] }</strong
             >
           </li>
           <li>
@@ -30,14 +30,14 @@
           <div class="control">
             <div class="tags has-addons">
               <span class="tag is-dark">Firmware</span>
-              <span class="tag is-info">{ apiConfig.fw }</span>
+              <span class="tag is-info">{ configDevice.fw }</span>
             </div>
           </div>
 
           <div class="control">
             <div class="tags has-addons">
               <span class="tag is-dark">Plugin</span>
-              <span class="tag is-info">{ apiConfig.plugin }</span>
+              <span class="tag is-info">{ configDevice.plugin }</span>
             </div>
           </div>
         </div>

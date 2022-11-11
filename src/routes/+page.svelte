@@ -1,8 +1,8 @@
 <script>
-  import { range } from "./helper/range.js";
+  import { range, extractFc, isBypassActive } from "./helper/range.js";
   import ConfigSpdif from "./module/ConfigSpdif.svelte";
   import ModalChartGeneric from "./modal/ModalChartGeneric.svelte";
-  import { apiAllfc, apiAllinputs, apiAllnames, apiMvol, apiAllbyp } from "./data.js";
+  import { apiAllbyp, apiAllfc, apiAllinputs, apiAllnames, apiMvol } from "./helper/dataDefault.js";
 
   const configSoundProc = {
     countChannel: 8,
@@ -87,7 +87,11 @@
   };
 
   const state = {
-    activeFilter: null,
+    activeFilter: {
+      type: "lowpass",
+      nameApiEndpoint: "lp",
+      id: 0
+    },
     mVol: apiMvol.vol,
     input: {
       0: apiAllinputs.in0,
@@ -101,33 +105,14 @@
     }
   };
 
-  function extractFc(idFc, allFc) {
-    const regex = /<h4>(.*)<\/h4>/;
-    const obj = allFc.find(o => o.name === idFc);
-    let m;
-    let value = "-";
+  function setChartSettings(filterSelected, nameApiEndpoint, idAudioElement) {
+    state.activeFilter.type = filterSelected;
+    state.activeFilter.nameApiEndpoint = nameApiEndpoint;
+    state.activeFilter.id = idAudioElement;
 
-    if (obj && (m = regex.exec(obj.val)) !== null) {
-      // The result can be accessed through the `m`-variable.
-      m.forEach((match) => {
-        value = match;
-      });
-    }
-
-    return value;
+    console.log(state.activeFilter);
   }
-
-  function isBypassActive(idBypass, allBypass) {
-    const obj = allBypass.find(o => o.name === idBypass);
-    let value = 0;
-
-    if (obj) {
-      value = obj.val;
-    }
-
-    return value;
-  }
-</script>
+  </script>
 
 <svelte:head>
   <title>8 Channel | freeDSP Aurora</title>
@@ -137,15 +122,15 @@
 <div class="card">
   <div class="card-content">
     <div class="content">
-      {#each range(0, configSoundProc.countChannel, 1) as num}
-        <div class="columns is-variable mb-0 is-vcentered">
+      {#each range(0, configSoundProc.countChannel, 1) as num (num)}
+        <div class="columns is-variable is-1 mb-0 is-vcentered">
           <div class="column is-fullwidth">
             <div class="field">
               <label class="label label-narrow">{apiAllnames.inputs[num]}</label>
               <div class="control">
                 <div class="select">
                   <select bind:value={ state.input[num] }>
-                    {#each Object.entries(configChannelSource) as [id, name]}
+                    {#each Object.entries(configChannelSource) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}
                   </select>
@@ -153,16 +138,18 @@
               </div>
             </div>
           </div>
-          {#each Object.entries(configSoundProc.soundBlocks) as [name, definition]}
+          {#each Object.entries(configSoundProc.soundBlocks) as [name, definition], index (name)}
             <div class="column">
               <div class="field has-addons">
-                <button class="button is-fullwidth .min-width {definition.color} js-modal-trigger is-multiline"
-                        data-target="modal-chart-generic"
-                        on:click={state.activeFilter = definition.fn}><span><span>{definition.name}</span><br /><span
+                <button
+                  class="button min-width-audio-block is-fullwidth {definition.color} js-modal-trigger is-multiline"
+                  data-target="modal-chart-generic"
+                  on:click={setChartSettings(definition.fn, name, num)}><span><span class="has-text-weight-bold">{definition.name}</span><br /><span
                   class="is-size-7 is-family-code">{extractFc(definition.idPrefix + num, apiAllfc.fc)}</span></span>
                 </button>
                 {#if name !== 'phase'}
-                  <button class="button is-danger is-multiline {isBypassActive(definition.idPrefix + num, apiAllbyp.byp) === 0 ? 'is-outlined' : ''}">
+                  <button class="button is-danger is-multiline"
+                          class:is-outlined={isBypassActive(definition.idPrefix + num, apiAllbyp.byp) === 0}>
                       <span class="icon is-small">
                         <i class="fas fa-volume-off"></i>
                       </span>
@@ -172,7 +159,7 @@
             </div>
           {/each}
           <div class="column">
-            <button class="button is-static">
+            <button class="button is-static is-fullwidth">
               {apiAllnames.outputs[num] || "Out " + num + 1}
             </button>
             <strong></strong>
@@ -180,26 +167,29 @@
         </div>
       {/each}
 
-      <div class="columns">
-        <div class="column">
-          <div class="field is-fullwidth">
-            <label class="label">Volume</label>
-            <div class="control">
-              <input bind:value={state.mVol} class="slider" id="mvol" max="0" min="-80" step="1" type="range" />
-            </div>
-          </div>
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-1 has-text-right">
+          <label class="label">Volume</label>
         </div>
-        <div class="column is-one-fifth">
-          <span class="tag is-light">{state.mVol}</span>
+        <div class="column is-half is-vcentered pos-slider">
+          <input bind:value={state.mVol} class="fullwidth-100p" id="mvol" max="0" min="-80" step="1" type="range">
+        </div>
+        <div class="column is-2">
+          <div class="control has-icons-right">
+            <input class="input" type="number" max="0" min="-80" step="1" bind:value={state.mVol}>
+            <span class="icon is-small is-right">
+              dB
+            </span>
+          </div>
         </div>
       </div>
     </div>
 
     <footer class="card-footer">
-      {#each Object.entries(configPreset) as [id, name]}
-        <button class="button is-info card-footer-item">{apiAllnames.presets[id] || name}</button>
+      {#each Object.entries(configPreset) as [id, name] (id)}
+        <button class="button is-info card-footer-item has-text-weight-bold">{apiAllnames.presets[id] || name}</button>
       {/each}
-      <button class="button is-success card-footer-item">Save</button>
+      <button class="button is-success card-footer-item has-text-weight-bold">Save</button>
     </footer>
   </div>
 </div>
@@ -217,7 +207,15 @@
         margin-bottom: 0;
     }
 
-    .button.min-width {
-        min-width: 60px;
+    .min-width-audio-block {
+        min-width: 90px;
+    }
+
+    .fullwidth-100p {
+        min-width: 100%;
+    }
+
+    .pos-slider {
+        padding-top: 20px;
     }
 </style>

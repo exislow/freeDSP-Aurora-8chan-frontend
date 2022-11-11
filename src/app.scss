@@ -1,5 +1,4 @@
-@import "_variables-theme";
-
+// importing core styling file
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/_all";
 @import "bulma/sass/elements/_all";
@@ -9,8 +8,13 @@
 @import "bulma/sass/helpers/_all";
 @import "bulma/sass/layout/_all";
 
-// importing core styling file
+// Extensions
+@import "src/bulma-pageloader";
+
+// Fonts
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import "@fortawesome/fontawesome-free/scss/solid";
 
+// Variable overrides
 @import "_override";
+
