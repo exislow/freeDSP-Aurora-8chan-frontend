@@ -1,67 +1,12 @@
 <script>
-  import { range, extractFc, isBypassActive } from "./helper/range.js";
+  import { extractFc, isBypassActive, range } from "./helper/range.js";
   import ConfigSpdif from "./component/ConfigSpdif.svelte";
-  import ModalChartGeneric from "./modal/ModalChartGeneric.svelte";
-  import { apiAllbyp, apiAllfc, apiAllinputs, apiAllnames } from "./helper/dataDefault.js";
-  import { configSite } from "./helper/constants.js";
+  import { configSite, modal, soundProcessor } from "./helper/constants.js";
+  import { filterActive } from "./helper/store.js";
+  import { modalOpen } from "./helper/modal.js";
 
-  export let volumeMaster = 0;
-  export let configDevice = {};
-  export let spdifOut;
-
-  const configSoundProc = {
-    countChannel: 8,
-    soundBlocks: {
-      hp: {
-        name: "HiP",
-        color: "is-info",
-        fn: "highpass",
-        idPrefix: "hp"
-      },
-      lshelv: {
-        name: "LShelf",
-        color: "is-link",
-        fn: "lowshelf",
-        idPrefix: "ls"
-      },
-      peqbank: {
-        name: "PEQs",
-        color: "is-primary",
-        fn: "peak",
-        idPrefix: "peqbank"
-      },
-      hshelv: {
-        name: "HShelf",
-        color: "is-link",
-        fn: "highshelf",
-        idPrefix: "hs"
-      },
-      lp: {
-        name: "LoP",
-        color: "is-info",
-        fn: "lowpass",
-        idPrefix: "lp"
-      },
-      phase: {
-        name: "Phase",
-        color: "is-warning",
-        fn: "lowpass",
-        idPrefix: "ph"
-      },
-      delay: {
-        name: "Delay",
-        color: "is-success",
-        fn: "lowpass",
-        idPrefix: "dly"
-      },
-      gain: {
-        name: "Gain",
-        color: "is-primary",
-        fn: "lowpass",
-        idPrefix: "gn"
-      }
-    }
-  };
+  export let data;
+  let volumeMaster = data.volumeMaster.vol;
 
   const configPreset = {
     0: "Preset A",
@@ -92,30 +37,24 @@
   };
 
   const state = {
-    activeFilter: {
-      type: "lowpass",
-      nameApiEndpoint: "lp",
-      id: 0
-    },
     volumeMaster: volumeMaster,
     input: {
-      0: apiAllinputs.in0,
-      1: apiAllinputs.in1,
-      2: apiAllinputs.in2,
-      3: apiAllinputs.in3,
-      4: apiAllinputs.in4,
-      5: apiAllinputs.in5,
-      6: apiAllinputs.in6,
-      7: apiAllinputs.in7
+      0: data.audioInput.in0,
+      1: data.audioInput.in1,
+      2: data.audioInput.in2,
+      3: data.audioInput.in3,
+      4: data.audioInput.in4,
+      5: data.audioInput.in5,
+      6: data.audioInput.in6,
+      7: data.audioInput.in7
     }
   };
 
-  function setChartSettings(filterSelected, nameApiEndpoint, idAudioElement) {
-    state.activeFilter.type = filterSelected;
-    state.activeFilter.nameApiEndpoint = nameApiEndpoint;
-    state.activeFilter.id = idAudioElement;
+  function activateModalChart(target, filterId, channelNumber) {
+    $filterActive.id = filterId;
+    $filterActive.channelNumber = channelNumber;
 
-    console.log(state.activeFilter);
+    modalOpen(target);
   }
 
   function updateVolumeMaster() {
@@ -133,11 +72,11 @@
 <div class="card">
   <div class="card-content">
     <div class="content">
-      {#each range(0, configSoundProc.countChannel, 1) as num (num)}
+      {#each range(0, soundProcessor.countChannel, 1) as num (num)}
         <div class="columns is-variable is-1 mb-0 is-vcentered">
           <div class="column is-fullwidth">
             <div class="field">
-              <label class="label label-narrow">{apiAllnames.inputs[num]}</label>
+              <label class="label label-narrow">{data.channelNames.inputs[num]}</label>
               <div class="control">
                 <div class="select">
                   <select bind:value={ state.input[num] }>
@@ -149,18 +88,23 @@
               </div>
             </div>
           </div>
-          {#each Object.entries(configSoundProc.soundBlocks) as [name, definition], index (name)}
+
+          {#each Object.entries(soundProcessor.soundBlocks) as [name, definition], index (name)}
             <div class="column">
               <div class="field has-addons">
                 <button
                   class="button min-width-audio-block is-fullwidth {definition.color} js-modal-trigger is-multiline"
-                  data-target="modal-chart-generic"
-                  on:click={setChartSettings(definition.fn, name, num)}><span><span class="has-text-weight-bold">{definition.name}</span><br /><span
-                  class="is-size-7 is-family-code">{extractFc(definition.idPrefix + num, apiAllfc.fc)}</span></span>
+                  data-target="{modal.chartGeneric.id}"
+                  on:click={() => activateModalChart(modal.chartGeneric.id, name, num)}>
+                  <span>
+                    <span class="has-text-weight-bold">{definition.name.short}</span><br />
+                    <span class="is-size-7 is-family-code">{extractFc(definition.idPrefix + num, data.fcAll.fc)}</span>
+                  </span>
                 </button>
+
                 {#if name !== 'phase'}
                   <button class="button is-danger is-multiline"
-                          class:is-outlined={isBypassActive(definition.idPrefix + num, apiAllbyp.byp) === 0}>
+                          class:is-outlined={isBypassActive(definition.idPrefix + num, data.bypassAll.byp) === 0}>
                       <span class="icon is-small">
                         <i class="fas fa-volume-off"></i>
                       </span>
@@ -169,9 +113,10 @@
               </div>
             </div>
           {/each}
+
           <div class="column">
             <button class="button is-static is-fullwidth">
-              {apiAllnames.outputs[num] || "Out " + num + 1}
+              {data.channelNames.outputs[num] || "Out " + num + 1}
             </button>
             <strong></strong>
           </div>
@@ -182,9 +127,11 @@
         <div class="column is-1 has-text-right">
           <label class="label">Volume</label>
         </div>
+
         <div class="column is-half is-vcentered pos-slider">
           <input bind:value={state.volumeMaster} class="fullwidth-100p" id="mvol" max="{configSite.volume.max}" min="{configSite.volume.min}" step="{configSite.volume.step}" type="range" on:change={updateVolumeMaster}>
         </div>
+
         <div class="column is-2">
           <div class="control has-icons-right">
             <input class="input" type="number" max="{configSite.volume.max}" min="{configSite.volume.min}" step="{configSite.volume.step}" bind:value={state.volumeMaster} on:change={updateVolumeMaster}>
@@ -198,15 +145,14 @@
 
     <footer class="card-footer">
       {#each Object.entries(configPreset) as [id, name] (id)}
-        <button class="button is-info card-footer-item has-text-weight-bold">{apiAllnames.presets[id] || name}</button>
+        <button class="button is-info card-footer-item has-text-weight-bold">{data.channelNames.presets[id] || name}</button>
       {/each}
       <button class="button is-success card-footer-item has-text-weight-bold">Save</button>
     </footer>
   </div>
 </div>
 
-<ConfigSpdif bind:configAddon={configDevice.addcfg} bind:spdifOut={spdifOut} outputGeneric={configChannelSource} />
-<ModalChartGeneric bind:filter={state.activeFilter} />
+<ConfigSpdif bind:configAddon={data.configDevice.addcfg} bind:spdifOut={data.spdifOut} outputGeneric={configChannelSource} />
 
 <style>
     .button.is-multiline {

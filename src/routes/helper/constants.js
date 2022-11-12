@@ -32,7 +32,7 @@ export const modal = {
   },
   chartGeneric: {
     id: "modal-chart-generic",
-    name: "tbd"
+    name: "DSP"
   }
 };
 
@@ -72,6 +72,84 @@ export const hardware = {
         0: "Not installed.",
         1: "Installed"
       }
+    }
+  }
+};
+
+export const soundProcessor = {
+  countChannel: 8,
+  soundBlocks: {
+    hp: {
+      name: {
+        short: "HiP",
+        long: "High Pass"
+      },
+      color: "is-info",
+      fn: "highpass",
+      idPrefix: "hp"
+    },
+    lshelv: {
+      name: {
+        short: "LShelf",
+        long: "Low Shelf"
+      },
+      color: "is-link",
+      fn: "lowshelf",
+      idPrefix: "ls"
+    },
+    peqbank: {
+      name: {
+        short: "PEQs",
+        long: "Parametric Equalizers"
+      },
+      color: "is-primary",
+      fn: "peak",
+      idPrefix: "peqbank"
+    },
+    hshelv: {
+      name: {
+        short: "HShelf",
+        long: "High Shelf"
+      },
+      color: "is-link",
+      fn: "highshelf",
+      idPrefix: "hs"
+    },
+    lp: {
+      name: {
+        short: "LoP",
+        long: "Low Pass"
+      },
+      color: "is-info",
+      fn: "lowpass",
+      idPrefix: "lp"
+    },
+    phase: {
+      name: {
+        short: "Phase",
+        long: "Phase"
+      },
+      color: "is-warning",
+      fn: "lowpass",
+      idPrefix: "ph"
+    },
+    delay: {
+      name: {
+        short: "Delay",
+        long: "Delay"
+      },
+      color: "is-success",
+      fn: "lowpass",
+      idPrefix: "dly"
+    },
+    gain: {
+      name: {
+        short: "Gain",
+        long: "Gain"
+      },
+      color: "is-primary",
+      fn: "lowpass",
+      idPrefix: "gn"
     }
   }
 };

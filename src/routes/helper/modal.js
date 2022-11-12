@@ -1,12 +1,13 @@
-import { activeModal } from "../helper/store.js";
+import { modalActive } from "../helper/store.js";
 
 // Functions to open and close a modal
 export function modalOpen(idModal) {
-  activeModal.set(idModal);
+  console.log("modal", idModal);
+  modalActive.set(idModal);
 }
 
 export function modalClose() {
-  activeModal.set(false);
+  modalActive.set(false);
 }
 
 export function handleKeydown(element, event) {

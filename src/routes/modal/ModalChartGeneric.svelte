@@ -110,8 +110,8 @@
   const response = iirFilter.response(20000);
   const data = labels.map((f) => { return response[f].dBmagnitude; })
 
-  console.log(labels)
-  console.log(response)
+  console.log('labels', labels)
+  console.log('response', response)
 
   export const cData = {
     labels: labels,
@@ -128,17 +128,6 @@
     ]
   };
 </script>
-
-
-<div id="modal-chart-generic" class="modal">
-  <div class="modal-background" />
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">High Pass Filter Input 1</p>
-      <button class="delete" aria-label="close" />
-    </header>
-
-    <section class="modal-card-body">
 
 <div class="card">
   <div class="card-content">
@@ -180,8 +169,4 @@
   <footer class="card-footer">
     <button class="button card-footer-item is-primary">Save</button>
   </footer>
-</div>
-
-    </section>
-  </div>
 </div>
