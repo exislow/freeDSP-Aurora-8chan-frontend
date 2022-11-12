@@ -6,7 +6,6 @@ export function modalOpen(idModal) {
 }
 
 export function modalClose() {
-  console.log("falseee");
   activeModal.set(false);
 }
 

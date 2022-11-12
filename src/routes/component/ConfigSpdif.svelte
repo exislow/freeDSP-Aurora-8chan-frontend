@@ -1,5 +1,7 @@
 <script>
-  import { apiSpdifout, apiConfig } from "../helper/dataDefault.js";
+  export let spdifOut = {};
+  export let configAddon = '';
+  export let outputGeneric;
 
   const input = {
     "0x00": "TOSLINK 1",
@@ -23,26 +25,39 @@
     "0x00050007": "Output 8"
   };
 
-  export let outputGeneric;
   const output = { ...outputGeneric, ...outputAnalog };
 
   const outputChannel = {
     left: {
       name: "Left",
       id: "spdif-out-left",
-      selected: apiSpdifout.spdifleft
+      selected: spdifOut.spdifleft
     },
     right: {
       name: "Right",
       id: "spdif-out-right",
-      selected: apiSpdifout.spdifright
+      selected: spdifOut.spdifright
     }
   };
 
   const stateSpdif = {
     input: {
-      selected: `0x0${apiConfig.addcfg.toString(16)}`
+      selected: `0x0${configAddon.toString(16)}`
     }
+  }
+
+  function updateConfigAddon() {
+    // implement post
+    // if 200
+    configAddon = parseInt(stateSpdif.input.selected, 16);
+  }
+
+  function updateSpdifOut() {
+    // implement post
+    // if 200
+    console.log(outputChannel.left.selected, outputChannel.right.selected)
+    spdifOut.spdifleft = outputChannel.left.selected;
+    spdifOut.spdifright = outputChannel.right.selected;
   }
 </script>
 
@@ -59,7 +74,7 @@
             <label class="label">Input</label>
             <div class="control">
               <div class="select is-fullwidth">
-                <select bind:value={stateSpdif.input.selected}>
+                <select bind:value={stateSpdif.input.selected} on:change={updateConfigAddon}>
                   {#each Object.entries(input) as [id, name] (id)}
                     <option value="{id}">{name}</option>
                   {/each}
@@ -75,7 +90,7 @@
               <label class="label">Output {valueChannel.name}</label>
               <div class="control">
                 <div class="select is-fullwidth">
-                  <select bind:value={ valueChannel.selected } id="{valueChannel.id}">
+                  <select bind:value={ valueChannel.selected } id="{valueChannel.id}" on:change={updateSpdifOut}>
                     {#each Object.entries(output) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}

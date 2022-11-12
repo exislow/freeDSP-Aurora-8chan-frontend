@@ -13,6 +13,11 @@ export const configSite = {
       channelNames: "allnames",
       configWifi: "wificonfig"
     }
+  },
+  volume: {
+    min: -80,
+    max: 0,
+    step: 0.5
   }
 };
 

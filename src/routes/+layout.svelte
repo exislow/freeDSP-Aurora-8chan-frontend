@@ -1,28 +1,28 @@
 <script>
   import "../app.scss";
-  import Header from "./module/Header.svelte";
-  import Footer from "./module/Footer.svelte";
-  import OverlayLoading from "./module/OverlayLoading.svelte";
+  import Header from "./component/Header.svelte";
+  import Footer from "./component/Footer.svelte";
+  import OverlayLoading from "./component/OverlayLoading.svelte";
   import { activeModal, apiLoading } from "./helper/store.js";
   import ModalFactory from "./modal/ModalFactory.svelte";
+  import Page from "./Page.svelte";
 
   /** @type {import('./$types').LayoutData} */
   export let data;
 
   $: {
-    $apiLoading = typeof data == "object" ? false : true
+    $apiLoading = typeof data == "object" ? false : true;
   }
 </script>
 
 <div class="container">
   <Header />
-
   {#await data}
     <!-- promise is pending -->
     <p>Waiting for the data to load...</p>
   {:then value}
     <!-- promise was fulfilled -->
-    <slot />
+    <Page bind:volumeMaster={data.volumeMaster.vol} bind:configDevice={data.configDevice} bind:spdifOut={data.spdifOut} />
 
     <Footer bind:configDevice={data.configDevice} />
     {#if $activeModal }
@@ -33,6 +33,7 @@
     <!-- promise was rejected -->
     <p>Something went wrong: {error.message}</p>
   {/await}
+  <slot />
 </div>
 
 <style>
