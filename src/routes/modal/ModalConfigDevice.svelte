@@ -1,7 +1,8 @@
 <script>
   import { hardware } from "../helper/constants.js";
-  import { modalActive } from "../helper/store.js";
+  import { apiLoading } from "../helper/store.js";
   import { deviceConfigPost } from "../helper/api.js";
+  import { toastSuccess, toastError } from "../helper/toast.js";
 
   export let configDevice = {};
   export let configWifi = {};
@@ -48,17 +49,17 @@
   async function updateDevice() {
     // implement post
     // if 200
-    $modalActive = true;
+    $apiLoading = true;
     const response = await deviceConfigPost(stateDevice.addon, stateDevice.adcSummation, !!stateDevice.volumePotentiometer);
-    $modalActive = false;
+    $apiLoading = false;
 
     if (response.ok) {
+      toastSuccess('Done');
       configDevice.aid = parseInt(stateDevice.addon);
       configDevice.adcsum = parseInt(stateDevice.adcSummation);
       configDevice.vpot = !!stateDevice.volumePotentiometer;
     } else {
-      // TODO: implement error handling / notification
-      console.log(response);
+      toastError(response);
     }
   }
 

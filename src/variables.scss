@@ -136,3 +136,11 @@ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
 // Bulma-extension page loader
 $pageloader-opacity: 0.7;
 
+// Toast
+// Position bottom right
+:root {
+    --toastContainerTop: auto;
+    --toastContainerRight: calc(1rem);
+    --toastContainerBottom: 1rem;
+    --toastContainerLeft: auto;
+}

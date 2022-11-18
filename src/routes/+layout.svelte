@@ -6,6 +6,7 @@
   import { modalActive, apiLoading } from "./helper/store.js";
   import ModalFactory from "./modal/ModalFactory.svelte";
   import Page from "./Page.svelte";
+  import { SvelteToast } from '@zerodevx/svelte-toast'
 
   $apiLoading = true;
   /** @type {import('./$types').LayoutData} */
@@ -14,6 +15,15 @@
   if (typeof data == "object") {
     $apiLoading = false;
   }
+
+  const toastOptions = {
+    duration: 4000,       // duration of progress bar tween to the `next` value
+    initial: 1,           // initial progress bar value
+    next: 0,              // next progress value
+    pausable: true,       // pause progress bar tween on mouse hover
+    intro: { y: 192 },    // toast intro fly animation settings
+    reversed: true
+  };
 </script>
 
 <div class="container">
@@ -37,6 +47,7 @@
     <p>Something went wrong: {error.message}</p>
   {/await}
   <slot />
+  <SvelteToast options="{toastOptions}" />
 </div>
 
 <style>

@@ -19,9 +19,9 @@ export async function apiPost(endpoint, data, fetchFn = fetch) {
   const options = {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      body: JSON.stringify(data)
-    }
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
   };
   const response = await apiFetch(endpoint, options, fetchFn);
   console.log("API post", response);
