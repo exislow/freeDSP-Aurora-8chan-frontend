@@ -1,4 +1,72 @@
 import { dev } from "$app/environment";
+import {
+  getHighPass,
+  getLowPass,
+  getHighShelf,
+  getLowShelf,
+  getGain,
+  getPhase,
+  getDelay,
+  getPeqBank
+} from "./api.js";
+
+export const configAudioFilter = {
+  0: {
+    name: "Bessel 6",
+    id: "bessel",
+    countCascade: 1
+  },
+  1: {
+    name: "Bessel 12",
+    id: "bessel",
+    countCascade: 2
+  },
+  2: {
+    name: "Bessel 18",
+    id: "bessel",
+    countCascade: 3
+  },
+  3: {
+    name: "Bessel 24",
+    id: "bessel",
+    countCascade: 4
+  },
+  4: {
+    name: "Butterworth 12",
+    id: "butterworth",
+    countCascade: 2
+  },
+  5: {
+    name: "Butterworth 18",
+    id: "butterworth",
+    countCascade: 3
+  },
+  6: {
+    name: "Butterworth 24",
+    id: "butterworth",
+    countCascade: 4
+  },
+  7: {
+    name: "Linkwitz-Riley 12",
+    id: "linkwitzRiley",
+    countCascade: 1
+  },
+  8: {
+    name: "Linkwitz-Riley 24",
+    id: "linkwitzRiley",
+    countCascade: 2
+  },
+  9: {
+    name: "Linkwitz-Riley 36",
+    id: "linkwitzRiley",
+    countCascade: 3
+  },
+  10: {
+    name: "Linkwitz-Riley 48",
+    id: "linkwitzRiley",
+    countCascade: 4
+  }
+};
 
 export const configSite = {
   api: {
@@ -11,14 +79,23 @@ export const configSite = {
       fcAll: "allfc",
       volumeMaster: "mvol",
       channelNames: "allnames",
-      configWifi: "wificonfig"
+      configWifi: "wificonfig",
+      highPass: "hp?idx=",
+      lowPass: "lp?idx=",
+      highShelf: "hshelv?idx=",
+      lowShelf: "lshelv?idx=",
+      phase: "phase?idx=",
+      delay: "delay?idx=",
+      gain: "gain?idx=",
+      peqBank: "peqbank?idx="
     }
   },
   volume: {
     min: -80,
     max: 0,
     step: 0.5
-  }
+  },
+  filter: { configAudioFilter }
 };
 
 export const modal = {
@@ -76,6 +153,17 @@ export const hardware = {
   }
 };
 
+export const filterFunctions = {
+  hp: "highpass",
+  lp: "lowpass",
+  hshelv: "highshelf",
+  lshelv: "lowshelf",
+  peqbank: "peak",
+  phase: "lowpass",
+  delay: "lowpass",
+  gain: "lowpass"
+};
+
 export const soundProcessor = {
   countChannel: 8,
   soundBlocks: {
@@ -85,8 +173,31 @@ export const soundProcessor = {
         long: "High Pass"
       },
       color: "is-info",
-      fn: "highpass",
-      idPrefix: "hp"
+      fnName: filterFunctions.hp,
+      idPrefix: "hp",
+      api: {
+        get: getHighPass
+      },
+      dom: [
+        {
+          element: "select",
+          label: "Filter",
+          data: "configAudioFilter",
+          model: "filterId"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     lshelv: {
       name: {
@@ -94,8 +205,39 @@ export const soundProcessor = {
         long: "Low Shelf"
       },
       color: "is-link",
-      fn: "lowshelf",
-      idPrefix: "ls"
+      fnName: filterFunctions.lshelv,
+      idPrefix: "ls",
+      api: {
+        get: getLowShelf
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Gain",
+          unit: "dB",
+          model: "gainDb"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Slope",
+          unit: "S",
+          model: "slope"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     peqbank: {
       name: {
@@ -103,8 +245,40 @@ export const soundProcessor = {
         long: "Parametric Equalizers"
       },
       color: "is-primary",
-      fn: "peak",
-      idPrefix: "peqbank"
+      fnName: filterFunctions.peqbank,
+      idPrefix: "peqbank",
+      api: {
+        get: getPeqBank
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Gain (V0)",
+          unit: "dB",
+          model: "gainDb"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Bandwidth",
+          unit: "Q",
+          model: "q"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ],
+      domMultiplier: 10
     },
     hshelv: {
       name: {
@@ -112,8 +286,39 @@ export const soundProcessor = {
         long: "High Shelf"
       },
       color: "is-link",
-      fn: "highshelf",
-      idPrefix: "hs"
+      fnName: filterFunctions.hshelv,
+      idPrefix: "hs",
+      api: {
+        get: getHighShelf
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Gain",
+          unit: "dB",
+          model: "gainDb"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Slope",
+          unit: "S",
+          model: "slope"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     lp: {
       name: {
@@ -121,8 +326,31 @@ export const soundProcessor = {
         long: "Low Pass"
       },
       color: "is-info",
-      fn: "lowpass",
-      idPrefix: "lp"
+      fnName: filterFunctions.lp,
+      idPrefix: "lp",
+      api: {
+        get: getLowPass
+      },
+      dom: [
+        {
+          element: "select",
+          label: "Filter",
+          data: "configAudioFilter",
+          model: "filterId"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     phase: {
       name: {
@@ -130,8 +358,32 @@ export const soundProcessor = {
         long: "Phase"
       },
       color: "is-warning",
-      fn: "lowpass",
-      idPrefix: "ph"
+      fnName: filterFunctions.phase,
+      idPrefix: "ph",
+      api: {
+        get: getPhase
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Cut-off Frequency [Hz]",
+          unit: "Hz",
+          model: "fcHz"
+        },
+        {
+          element: "input",
+          type: "number",
+          label: "Bandwidth",
+          unit: "Q",
+          model: "q"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     delay: {
       name: {
@@ -139,8 +391,25 @@ export const soundProcessor = {
         long: "Delay"
       },
       color: "is-success",
-      fn: "lowpass",
-      idPrefix: "dly"
+      fnName: filterFunctions.delay,
+      idPrefix: "dly",
+      api: {
+        get: getDelay
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Delay",
+          unit: "ms",
+          model: "delayMs"
+        },
+        {
+          element: "button",
+          label: "Bypass",
+          model: "isBypass"
+        }
+      ]
     },
     gain: {
       name: {
@@ -148,8 +417,53 @@ export const soundProcessor = {
         long: "Gain"
       },
       color: "is-primary",
-      fn: "lowpass",
-      idPrefix: "gn"
+      fnName: filterFunctions.gain,
+      idPrefix: "gn",
+      api: {
+        get: getGain
+      },
+      dom: [
+        {
+          element: "input",
+          type: "number",
+          label: "Gain",
+          unit: "dB",
+          model: "gainDb"
+        },
+        {
+          element: "button",
+          label: "Mute",
+          model: "isBypass"
+        }
+      ]
     }
   }
+};
+
+export const configPreset = {
+  0: "Preset A",
+  1: "Preset B",
+  2: "Preset C",
+  3: "Preset D"
+};
+
+export const configChannelSource = {
+  "0x00000000": "Analog 1",
+  "0x00000001": "Analog 2",
+  "0x00000002": "Analog 3",
+  "0x00000003": "Analog 4",
+  "0x00000004": "Analog 5",
+  "0x00000005": "Analog 6",
+  "0x00000006": "Analog 7",
+  "0x00000007": "Analog 8",
+  "0x00010000": "USB 1",
+  "0x00010001": "USB 2",
+  "0x00010002": "USB 3",
+  "0x00010003": "USB 4",
+  "0x00010004": "USB 5",
+  "0x00010005": "USB 6",
+  "0x00010006": "USB 7",
+  "0x00010007": "USB 8",
+  "0x00040000": "S/PDIF L",
+  "0x00040001": "S/PDIF R"
 };

@@ -1,40 +1,12 @@
 <script>
   import { extractFc, isBypassActive, range } from "./helper/range.js";
   import ConfigSpdif from "./component/ConfigSpdif.svelte";
-  import { configSite, modal, soundProcessor } from "./helper/constants.js";
-  import { filterActive } from "./helper/store.js";
+  import { configPreset, configSite, modal, soundProcessor, configChannelSource } from "./helper/constants.js";
+  import { filterActive, presetActive, apiLoading } from "./helper/store.js";
   import { modalOpen } from "./helper/modal.js";
 
   export let data;
   let volumeMaster = data.volumeMaster.vol;
-
-  const configPreset = {
-    0: "Preset A",
-    1: "Preset B",
-    2: "Preset C",
-    3: "Preset D"
-  };
-
-  const configChannelSource = {
-    "0x00000000": "Analog 1",
-    "0x00000001": "Analog 2",
-    "0x00000002": "Analog 3",
-    "0x00000003": "Analog 4",
-    "0x00000004": "Analog 5",
-    "0x00000005": "Analog 6",
-    "0x00000006": "Analog 7",
-    "0x00000007": "Analog 8",
-    "0x00010000": "USB 1",
-    "0x00010001": "USB 2",
-    "0x00010002": "USB 3",
-    "0x00010003": "USB 4",
-    "0x00010004": "USB 5",
-    "0x00010005": "USB 6",
-    "0x00010006": "USB 7",
-    "0x00010007": "USB 8",
-    "0x00040000": "S/PDIF L",
-    "0x00040001": "S/PDIF R"
-  };
 
   const state = {
     volumeMaster: volumeMaster,
@@ -61,6 +33,12 @@
     // implement post
     // if 200
     volumeMaster = state.volumeMaster;
+  }
+
+  function presetChange(presetId) {
+    $apiLoading = true;
+    $presetActive = presetId;
+    $apiLoading = false;
   }
   </script>
 
@@ -145,7 +123,8 @@
 
     <footer class="card-footer">
       {#each Object.entries(configPreset) as [id, name] (id)}
-        <button class="button is-info card-footer-item has-text-weight-bold">{data.channelNames.presets[id] || name}</button>
+        {@const isActive = $presetActive == id ? true : false}
+        <button class="button is-info card-footer-item has-text-weight-bold" class:is-active={isActive} on:click={() => presetChange(id)}>{data.channelNames.presets[id] || name}</button>
       {/each}
       <button class="button is-success card-footer-item has-text-weight-bold">Save</button>
     </footer>

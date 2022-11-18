@@ -1,7 +1,3 @@
-<script>
-  export let apiLoading;
-</script>
-
-<div class="pageloader" class:is-active={apiLoading}>
+<div class="pageloader is-active">
   <span class="title">Loading...</span>
 </div>

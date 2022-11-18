@@ -7,11 +7,12 @@
   import ModalFactory from "./modal/ModalFactory.svelte";
   import Page from "./Page.svelte";
 
+  $apiLoading = true;
   /** @type {import('./$types').LayoutData} */
   export let data;
 
-  $: {
-    $apiLoading = typeof data == "object" ? false : true;
+  if (typeof data == "object") {
+    $apiLoading = false;
   }
 </script>
 
@@ -28,7 +29,9 @@
     {#if $modalActive }
       <ModalFactory bind:modalActive={$modalActive} bind:data={data}/>
     {/if}
-    <OverlayLoading bind:apiLoading={$apiLoading} />
+    {#if $apiLoading}
+      <OverlayLoading />
+    {/if}
   {:catch error}
     <!-- promise was rejected -->
     <p>Something went wrong: {error.message}</p>

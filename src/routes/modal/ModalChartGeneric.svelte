@@ -15,78 +15,63 @@
   import { canvasBgColor, cOptions, cursorVerticalLine } from "../helper/chartJs.js";
   import Fili from "fili";
   import { logspace } from "../helper/range.js";
-
-  export let filter;
+  import { configSite, filterFunctions, soundProcessor } from "../helper/constants.js";
+  import { apiLoading } from "../helper/store.js";
+  import { onMount } from "svelte";
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
   ChartJS.defaults.borderColor = "#718096";
   ChartJS.defaults.color = "#b8c1cf";
 
-  const configFilter = {
-    0: {
-      name: "Bessel 6",
-      id: "bessel",
-      countCascade: 1
-    },
-    1: {
-      name: "Bessel 12",
-      id: "bessel",
-      countCascade: 2
-    },
-    2: {
-      name: "Bessel 18",
-      id: "bessel",
-      countCascade: 3
-    },
-    3: {
-      name: "Bessel 24",
-      id: "bessel",
-      countCascade: 4
-    },
-    4: {
-      name: "Butterworth 12",
-      id: "butterworth",
-      countCascade: 2
-    },
-    5: {
-      name: "Butterworth 18",
-      id: "butterworth",
-      countCascade: 3
-    },
-    6: {
-      name: "Butterworth 24",
-      id: "butterworth",
-      countCascade: 4
-    },
-    7: {
-      name: "Linkwitz-Riley 12",
-      id: "linkwitzRiley",
-      countCascade: 1
-    },
-    8: {
-      name: "Linkwitz-Riley 24",
-      id: "linkwitzRiley",
-      countCascade: 2
-    },
-    9: {
-      name: "Linkwitz-Riley 36",
-      id: "linkwitzRiley",
-      countCascade: 3
-    },
-    10: {
-      name: "Linkwitz-Riley 48",
-      id: "linkwitzRiley",
-      countCascade: 4
-    }
-  };
+  // Binding props
+  export let filter;
+  export let fcAll;
+  export let bypassAll;
 
+  $apiLoading = true;
+  const soundBlockItem = soundProcessor.soundBlocks[filter.id];
+  let apiSoundBlockData;
+  const binding = {
+    fcHz: "0",
+    isBypass: "0",
+    filterId: "0",
+    slope: "0",
+    gainDb: "0",
+    q: 0,
+    invert: "0",
+    delayMs: 0
+  };
+  const filterPass = [filterFunctions.lp, filterFunctions.hp];
+
+  onMount(async () => {
+    apiSoundBlockData = await soundBlockItem.api.get(filter.channelNumber);
+    binding.fcHz = apiSoundBlockData.fc ? apiSoundBlockData.fc : false;
+    binding.filterId = apiSoundBlockData.typ ? apiSoundBlockData.typ.toString() : false;
+    binding.slope = apiSoundBlockData.slope ? apiSoundBlockData.slope : false;
+    binding.gainDb = apiSoundBlockData.gain ? apiSoundBlockData.gain : false;
+    binding.isBypass = apiSoundBlockData["bypass"] ? apiSoundBlockData["bypass"] : apiSoundBlockData.mute;
+    binding.q = apiSoundBlockData.Q ? apiSoundBlockData.Q : false;
+    binding.invert = apiSoundBlockData.inv ? apiSoundBlockData.inv : false;
+    binding.delayMs = apiSoundBlockData.dly ? apiSoundBlockData.dly : false;
+
+    $apiLoading = false;
+  });
+
+  // Reactive variables.
+  // Get indexes of the overall arrays, to not get all values for the main page everytime an audio block changes.
+  const bypassAllIndex = bypassAll.byp.findIndex((obj) => obj.name === `${soundBlockItem.idPrefix}${filter.channelNumber}`);
+  const fcAllIndex = fcAll.fc.findIndex((obj) => obj.name === `${soundBlockItem.idPrefix}${filter.channelNumber}`);
+
+  // Create x-axis labels
   let labels = logspace(-1, 4.305, 1000);
-  labels = labels.map((f) => { return f >> 0; });
+  labels = labels.map((f) => {
+    return f >> 0;
+  });
   labels = [...new Set(labels)];
   labels = [...new Set(labels)];
   labels = labels.filter((f) => {
-    return f < 20000 ;
+    return f < 20000;
   });
 
   //  Instance of a filter coefficient calculator
@@ -95,7 +80,7 @@
   // calculate filter coefficients
   const iirFilterCoeffs = iirCalculator.lowpass({
     order: 3, // cascade 3 biquad filters (max: 12)
-    characteristic: 'bessel',
+    characteristic: "bessel",
     Fs: 40000, // sampling frequency
     Fc: 200, // cutoff frequency / center frequency for bandpass, bandstop, peak
     BW: 1, // bandwidth only for bandstop and bandpass filters - optional
@@ -108,12 +93,14 @@
   const iirFilter = new Fili.IirFilter(iirFilterCoeffs);
 
   const response = iirFilter.response(20000);
-  const data = labels.map((f) => { return response[f].dBmagnitude; })
+  const data = labels.map((f) => {
+    return response[f].dBmagnitude;
+  });
 
-  console.log('labels', labels)
-  console.log('response', response)
+  console.log("labels", labels);
+  console.log("response", response);
 
-  export const cData = {
+  const cData = {
     labels: labels,
     datasets: [
       {
@@ -127,46 +114,60 @@
       }
     ]
   };
+
+  function bypassToggle() {
+    binding.isBypass = binding.isBypass == "1" ? "0" : "1";
+  }
 </script>
 
 <div class="card">
-  <div class="card-content">
-    <div class="media">
-      <Line
-        data={cData}
-        options={cOptions}
-      />
-    </div>
+  <form>
+    <div class="card-content">
+      <div class="media">
+        <Line
+          data={cData}
+          options={cOptions}
+        />
+      </div>
 
-    <div class="content">
-      <div class="columns">
-        <div class="column">
-          <div class="field is-small">
-            <label class="label">Cut-off Frequency [Hz]</label>
-            <div class="control">
-              <input class="input" placeholder="Cut-off Frequency [Hz]" type="text">
-            </div>
-          </div>
-        </div>
-
-        <div class="column">
-          <div class="field is-small">
-            <label class="label">Filter</label>
-            <div class="control">
-              <div class="select is-normal is-fullwidth">
-                <select>
-                  {#each Object.entries(configFilter) as [id, values] (id)}
-                    <option value={id}>{values.name}</option>
-                  {/each}
-                </select>
+      <div class="content">
+        {#if soundBlockItem}
+        <div class="columns">
+          {#each soundBlockItem.dom as domItem, index (index)}
+            <div class="column">
+              <div class="field is-small">
+                <label class="label">{domItem.label}</label>
+                <div class="control has-icons-right">
+                  {#if domItem.element == "input"}
+                    {#if domItem.type == "number"}
+                      <input class="input" placeholder="{domItem.label}" type="number"
+                             bind:value={binding[domItem.model]}>
+                    {/if}
+                    <span class="icon is-small is-right">{domItem.unit}</span>
+                  {:else if domItem.element == "select" }
+                    <div class="select is-normal is-fullwidth">
+                      <select bind:value={binding[domItem.model]}>
+                        {#each Object.entries(configSite.filter[domItem.data]) as [id, values] (id)}
+                          <option value={id}>{values.name}</option>
+                        {/each}
+                      </select>
+                    </div>
+                  {:else if domItem.element == "button"}
+                    <button class="button is-danger is-multiline is-fullwidth" class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={bypassToggle}>
+                        <span class="icon is-small">
+                          <i class="fas fa-volume-off"></i>
+                        </span>
+                    </button>
+                  {/if}
+                </div>
               </div>
             </div>
-          </div>
+          {/each}
         </div>
       </div>
     </div>
-  </div>
-  <footer class="card-footer">
-    <button class="button card-footer-item is-primary">Save</button>
-  </footer>
+    <footer class="card-footer">
+      <button class="button card-footer-item is-primary">Save</button>
+    </footer>
+  </form>
 </div>

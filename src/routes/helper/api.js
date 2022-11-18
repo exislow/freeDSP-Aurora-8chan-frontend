@@ -39,3 +39,35 @@ export async function getChannelNames(fetchFn = fetch) {
 export async function getConfigWifi(fetchFn = fetch) {
   return await getApi(configSite.api.endpoint.configWifi, fetchFn);
 }
+
+export async function getHighPass(index) {
+  return await getApi(`${configSite.api.endpoint.highPass}${index}`);
+}
+
+export async function getLowPass(index) {
+  return await getApi(`${configSite.api.endpoint.lowPass}${index}`);
+}
+
+export async function getHighShelf(index) {
+  return await getApi(`${configSite.api.endpoint.highShelf}${index}`);
+}
+
+export async function getLowShelf(index) {
+  return await getApi(`${configSite.api.endpoint.lowShelf}${index}`);
+}
+
+export async function getPhase(index) {
+  return await getApi(`${configSite.api.endpoint.phase}${index}`);
+}
+
+export async function getDelay(index) {
+  return await getApi(`${configSite.api.endpoint.delay}${index}`);
+}
+
+export async function getGain(index) {
+  return await getApi(`${configSite.api.endpoint.gain}${index}`);
+}
+
+export async function getPeqBank(index) {
+  return await getApi(`${configSite.api.endpoint.peqBank}${index}`);
+}
