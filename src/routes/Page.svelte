@@ -22,9 +22,10 @@
     }
   };
 
-  function activateModalChart(target, filterId, channelNumber) {
+  function activateModalChart(target, filterId, channelNumber, channelName) {
     $filterActive.id = filterId;
     $filterActive.channelNumber = channelNumber;
+    $filterActive.channelName = channelName;
 
     modalOpen(target);
   }
@@ -73,7 +74,7 @@
                 <button
                   class="button min-width-audio-block is-fullwidth {definition.color} js-modal-trigger is-multiline"
                   data-target="{modal.chartGeneric.id}"
-                  on:click={() => activateModalChart(modal.chartGeneric.id, name, num)}>
+                  on:click={() => activateModalChart(modal.chartGeneric.id, name, num, data.channelNames.inputs[num])}>
                   <span>
                     <span class="has-text-weight-bold">{definition.name.short}</span><br />
                     <span class="is-size-7 is-family-code">{extractFc(definition.idPrefix + num, data.fcAll.fc)}</span>

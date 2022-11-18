@@ -1,7 +1,6 @@
 <script>
   import { modal } from "../helper/constants.js";
-  import { modalClose } from "../helper/modal.js";
-  import { handleKeydown} from "../helper/modal.js";
+  import { handleKeydown, modalClose } from "../helper/modal.js";
   import { onDestroy } from "svelte";
   import ModalConfigDevice from "./ModalConfigDevice.svelte";
   import ModalPreset from "./ModalPreset.svelte";
@@ -12,7 +11,7 @@
   export let data;
   export let modalActive;
   let thisModal;
-  const previouslyFocused = typeof document !== 'undefined' && document.activeElement;
+  const previouslyFocused = typeof document !== "undefined" && document.activeElement;
 
   if (previouslyFocused) {
     onDestroy(() => {
@@ -21,26 +20,27 @@
   }
 
   function getModalObj(modals, idValue) {
-    const [ id, modal ] = Object.entries(modals).find(function([ id, modal ]) {
+    const [id, modal] = Object.entries(modals).find(function([id, modal]) {
 
       return modal.id === idValue;
-    })
+    });
 
-    return modal
+    return modal;
   }
 
   const modalObj = getModalObj(modal, modalActive);
 </script>
 
-<svelte:window on:keydown={(event) => handleKeydown(thisModal, event)}/>
+<svelte:window on:keydown={(event) => handleKeydown(thisModal, event)} />
 
-<div class="modal is-active" id="{modalObj.id}" aria-modal="true" bind:this={thisModal}>
+<div aria-modal="true" bind:this={thisModal} class="modal is-active" id="{modalObj.id}">
   <div class="modal-background" on:click={modalClose} />
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title">
-        {#if modalActive === modal.chartGeneric.id}
-          {soundProcessor.soundBlocks[$filterActive.id].name.long} for Channel {$filterActive.channelNumber + 1}
+        {#if modal.chartGeneric.id === modalActive}
+          {@const channelName = $filterActive.channelName != "" ? $filterActive.channelName : `Channel ${$filterActive.channelNumber + 1}`}
+          {soundProcessor.soundBlocks[$filterActive.id].name.long} for <strong>{channelName}</strong>
         {:else}
           {modalObj.name}
         {/if}

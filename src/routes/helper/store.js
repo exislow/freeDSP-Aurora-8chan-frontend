@@ -5,5 +5,6 @@ export const apiLoading = writable(false);
 export const presetActive = writable(0);
 export const filterActive = writable({
   id: "",
-  channelNumber: 0
+  channelNumber: 0,
+  channelName: ""
 });

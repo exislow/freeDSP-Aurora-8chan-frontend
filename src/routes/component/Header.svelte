@@ -4,11 +4,11 @@
 </script>
 
 <header>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav class="navbar" aria-label="main navigation">
     <div class="navbar-brand">
       <a
         class="navbar-item is-family-monospace has-text-weight-bold is-size-4"
-        href="https://github.com/freeDSP/freeDSP-aurora" target="_blank">freeDSP Aurora</a>
+        href="https://github.com/freeDSP/freeDSP-aurora" target="_blank" rel="noreferrer">freeDSP Aurora</a>
     </div>
 
     <div id="navbarBasicExample" class="navbar-menu">
