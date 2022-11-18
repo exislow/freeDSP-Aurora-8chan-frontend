@@ -188,7 +188,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },
@@ -221,7 +221,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },
@@ -254,7 +254,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },
@@ -302,7 +302,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },
@@ -341,7 +341,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },
@@ -367,7 +367,7 @@ export const soundProcessor = {
         {
           element: "input",
           type: "number",
-          label: "Cut-off Frequency [Hz]",
+          label: "Cut-off Frequency",
           unit: "Hz",
           model: "fcHz"
         },

@@ -14,7 +14,7 @@
   } from "chart.js";
   import { canvasBgColor, cOptions, cursorVerticalLine } from "../helper/chartJs.js";
   import Fili from "fili";
-  import { logspace } from "../helper/range.js";
+  import { logspace, range } from "../helper/range.js";
   import { configSite, filterFunctions, soundProcessor } from "../helper/constants.js";
   import { apiLoading } from "../helper/store.js";
   import { onMount } from "svelte";
@@ -50,6 +50,9 @@
     binding.filterId = apiSoundBlockData.typ ? apiSoundBlockData.typ.toString() : false;
     binding.slope = apiSoundBlockData.slope ? apiSoundBlockData.slope : false;
     binding.gainDb = apiSoundBlockData.gain ? apiSoundBlockData.gain : false;
+    if (!binding.gainDb) {
+      binding.gainDb = apiSoundBlockData.V0 ? apiSoundBlockData.V0 : false;
+    }
     binding.isBypass = apiSoundBlockData["bypass"] ? apiSoundBlockData["bypass"] : apiSoundBlockData.mute;
     binding.q = apiSoundBlockData.Q ? apiSoundBlockData.Q : false;
     binding.invert = apiSoundBlockData.inv ? apiSoundBlockData.inv : false;
@@ -131,39 +134,74 @@
       </div>
 
       <div class="content">
-        {#if soundBlockItem}
-        <div class="columns">
-          {#each soundBlockItem.dom as domItem, index (index)}
-            <div class="column">
-              <div class="field is-small">
-                <label class="label">{domItem.label}</label>
-                <div class="control has-icons-right">
-                  {#if domItem.element == "input"}
-                    {#if domItem.type == "number"}
-                      <input class="input" placeholder="{domItem.label}" type="number"
-                             bind:value={binding[domItem.model]}>
-                    {/if}
-                    <span class="icon is-small is-right">{domItem.unit}</span>
-                  {:else if domItem.element == "select" }
-                    <div class="select is-normal is-fullwidth">
-                      <select bind:value={binding[domItem.model]}>
-                        {#each Object.entries(configSite.filter[domItem.data]) as [id, values] (id)}
-                          <option value={id}>{values.name}</option>
-                        {/each}
-                      </select>
+        {#if soundBlockItem.idPrefix === "peqbank"}
+          <div class="columns">
+              <div class="column is-1 has-text-weight-bold">PEQ #</div>
+            {#each soundBlockItem.dom as domItem, index (index)}
+              <div class="column has-text-weight-bold has-text-centered">{domItem.label}</div>
+            {/each}
+          </div>
+          {#each range(0, soundBlockItem.domMultiplier, 1) as num (num)}
+            <div class="columns is-vcentered">
+              <div class="column is-1">{num + 1}</div>
+              {#each soundBlockItem.dom as domItem, index (index)}
+                <div class="column">
+                  <div class="field is-small">
+                    <div class="control has-icons-right">
+                      {#if domItem.element == "input"}
+                        {#if domItem.type == "number"}
+                          <input class="input" placeholder="{domItem.label}" type="number"
+                                 bind:value={binding[domItem.model][num]}>
+                        {/if}
+                        <span class="icon is-small is-right">{domItem.unit}</span>
+                      {:else if domItem.element == "button"}
+                        <button class="button is-danger is-multiline is-fullwidth" class:is-outlined={binding[domItem.model][num] == 0} on:click|preventDefault={bypassToggle}>
+                            <span class="icon is-small">
+                              <i class="fas fa-volume-off"></i>
+                            </span>
+                        </button>
+                      {/if}
                     </div>
-                  {:else if domItem.element == "button"}
-                    <button class="button is-danger is-multiline is-fullwidth" class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={bypassToggle}>
-                        <span class="icon is-small">
-                          <i class="fas fa-volume-off"></i>
-                        </span>
-                    </button>
-                  {/if}
+                  </div>
                 </div>
-              </div>
+              {/each}
             </div>
           {/each}
-        </div>
+        {:else}
+
+          <div class="columns">
+            {#each soundBlockItem.dom as domItem, index (index)}
+              <div class="column">
+                <div class="field is-small">
+                  <label class="label">{domItem.label}</label>
+                  <div class="control has-icons-right">
+                    {#if domItem.element == "input"}
+                      {#if domItem.type == "number"}
+                        <input class="input" placeholder="{domItem.label}" type="number"
+                               bind:value={binding[domItem.model]}>
+                      {/if}
+                      <span class="icon is-small is-right">{domItem.unit}</span>
+                    {:else if domItem.element == "select" }
+                      <div class="select is-normal is-fullwidth">
+                        <select bind:value={binding[domItem.model]}>
+                          {#each Object.entries(configSite.filter[domItem.data]) as [id, values] (id)}
+                            <option value={id}>{values.name}</option>
+                          {/each}
+                        </select>
+                      </div>
+                    {:else if domItem.element == "button"}
+                      <button class="button is-danger is-multiline is-fullwidth" class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={bypassToggle}>
+                          <span class="icon is-small">
+                            <i class="fas fa-volume-off"></i>
+                          </span>
+                      </button>
+                    {/if}
+                  </div>
+                </div>
+              </div>
+            {/each}
+          </div>
+        {/if}
       </div>
     </div>
     <footer class="card-footer">
