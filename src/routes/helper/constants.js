@@ -1,13 +1,13 @@
 import { dev } from "$app/environment";
 import {
-  getHighPass,
+  highPassGet,
   getLowPass,
   getHighShelf,
-  getLowShelf,
-  getGain,
-  getPhase,
-  getDelay,
-  getPeqBank
+  lowShelfGet,
+  gainGet,
+  phaseGet,
+  delayGet,
+  peqBankGet
 } from "./api.js";
 
 export const configAudioFilter = {
@@ -176,7 +176,7 @@ export const soundProcessor = {
       fnName: filterFunctions.hp,
       idPrefix: "hp",
       api: {
-        get: getHighPass
+        get: highPassGet
       },
       dom: [
         {
@@ -208,7 +208,7 @@ export const soundProcessor = {
       fnName: filterFunctions.lshelv,
       idPrefix: "ls",
       api: {
-        get: getLowShelf
+        get: lowShelfGet
       },
       dom: [
         {
@@ -248,7 +248,7 @@ export const soundProcessor = {
       fnName: filterFunctions.peqbank,
       idPrefix: "peqbank",
       api: {
-        get: getPeqBank
+        get: peqBankGet
       },
       dom: [
         {
@@ -361,7 +361,7 @@ export const soundProcessor = {
       fnName: filterFunctions.phase,
       idPrefix: "ph",
       api: {
-        get: getPhase
+        get: phaseGet
       },
       dom: [
         {
@@ -394,7 +394,7 @@ export const soundProcessor = {
       fnName: filterFunctions.delay,
       idPrefix: "dly",
       api: {
-        get: getDelay
+        get: delayGet
       },
       dom: [
         {
@@ -420,7 +420,7 @@ export const soundProcessor = {
       fnName: filterFunctions.gain,
       idPrefix: "gn",
       api: {
-        get: getGain
+        get: gainGet
       },
       dom: [
         {

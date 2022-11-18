@@ -1,5 +1,7 @@
 <script>
   import { hardware } from "../helper/constants.js";
+  import { modalActive } from "../helper/store.js";
+  import { deviceConfigPost } from "../helper/api.js";
 
   export let configDevice = {};
   export let configWifi = {};
@@ -43,12 +45,21 @@
     volumePotentiometer: configDevice.vpot ? "1" : "0"
   };
 
-  function updateDevice() {
+  async function updateDevice() {
     // implement post
     // if 200
-    configDevice.aid = parseInt(stateDevice.addon);
-    configDevice.adcsum = parseInt(stateDevice.adcSummation);
-    configDevice.vpot = !!stateDevice.volumePotentiometer;
+    $modalActive = true;
+    const response = await deviceConfigPost(stateDevice.addon, stateDevice.adcSummation, !!stateDevice.volumePotentiometer);
+    $modalActive = false;
+
+    if (response.ok) {
+      configDevice.aid = parseInt(stateDevice.addon);
+      configDevice.adcsum = parseInt(stateDevice.adcSummation);
+      configDevice.vpot = !!stateDevice.volumePotentiometer;
+    } else {
+      // TODO: implement error handling / notification
+      console.log(response);
+    }
   }
 
   function updateWifiConnect() {
