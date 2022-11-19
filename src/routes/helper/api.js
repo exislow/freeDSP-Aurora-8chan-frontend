@@ -102,3 +102,21 @@ export async function deviceConfigPost(addon, adcSummation, volumePotentiometer)
 
   return response;
 }
+
+export async function wifiApPost(ssid, password) {
+  const response = await apiPost(configSite.api.endpoint.wifiAp, {
+    apname: ssid,
+    pwdap: password
+  });
+
+  return response;
+}
+
+export async function wifiConnectPost(ssid, password) {
+  const response = await apiPost(configSite.api.endpoint.wifiConnect, {
+    ssid: ssid,
+    pwd: password
+  });
+
+  return response;
+}

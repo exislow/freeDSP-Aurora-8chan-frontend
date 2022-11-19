@@ -1,7 +1,7 @@
 <script>
   import { hardware } from "../helper/constants.js";
   import { apiLoading } from "../helper/store.js";
-  import { deviceConfigPost } from "../helper/api.js";
+  import { deviceConfigPost, wifiApPost, wifiConnectPost } from "../helper/api.js";
   import { toastSuccess, toastError } from "../helper/toast.js";
 
   export let configDevice = {};
@@ -47,14 +47,13 @@
   };
 
   async function updateDevice() {
-    // implement post
-    // if 200
     $apiLoading = true;
     const response = await deviceConfigPost(stateDevice.addon, stateDevice.adcSummation, !!stateDevice.volumePotentiometer);
     $apiLoading = false;
 
     if (response.ok) {
-      toastSuccess('Done');
+      toastSuccess('Device config saved.');
+
       configDevice.aid = parseInt(stateDevice.addon);
       configDevice.adcsum = parseInt(stateDevice.adcSummation);
       configDevice.vpot = !!stateDevice.volumePotentiometer;
@@ -63,16 +62,30 @@
     }
   }
 
-  function updateWifiConnect() {
-    // implement post
-    // if 200
-    configWifi.ssid = wifiConnect.form[0].value;
+  async function updateWifiConnect() {
+    $apiLoading = true;
+    const response = await wifiConnectPost(wifiConnect.form[0].value, wifiConnect.form[1].value);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess(`${wifiConnect.name} config saved.`);
+      configWifi.ssid = wifiConnect.form[0].value;
+    } else {
+      toastError(response);
+    }
   }
 
-  function updateWifiAp() {
-    // implement post
-    // if 200
-    configWifi.apname = wifiAp.form[0].value;
+  async function updateWifiAp() {
+    $apiLoading = true;
+    const response = await wifiApPost(wifiAp.form[0].value, wifiAp.form[1].value);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess(`${wifiAp.name} config saved.`);
+      configWifi.apname = wifiAp.form[0].value;
+    } else {
+      toastError(response);
+    }
   }
 </script>
 

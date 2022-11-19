@@ -87,7 +87,9 @@ export const configSite = {
       phase: "phase?idx=",
       delay: "delay?idx=",
       gain: "gain?idx=",
-      peqBank: "peqbank?idx="
+      peqBank: "peqbank?idx=",
+      wifiAp: "pwdap",
+      wifiConnect: "wifi"
     }
   },
   volume: {
