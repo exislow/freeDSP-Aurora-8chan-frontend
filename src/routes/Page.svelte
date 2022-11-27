@@ -10,7 +10,7 @@
     bypassAllGet,
     configDeviceGet, fcAllGet,
     presetSwitchPost,
-    spdifOutGet, volumeMasterGet
+    spdifOutGet, volumeMasterGet, volumeMasterPost
   } from "./helper/api.js";
   import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
 
@@ -39,10 +39,18 @@
     modalOpen(target);
   }
 
-  function updateVolumeMaster() {
-    // implement post
-    // if 200
-    volumeMaster = state.volumeMaster;
+  async function updateVolumeMaster() {
+    $apiLoading = true;
+    const response = await volumeMasterPost(state.volumeMaster);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess("Volume set.");
+      volumeMaster = state.volumeMaster;
+    } else {
+      toastErrorHttp(response);
+      state.volumeMaster = volumeMaster;
+    }
   }
 
   async function presetSwitch(presetId) {

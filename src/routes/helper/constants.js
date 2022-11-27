@@ -131,13 +131,6 @@ export const hardware = {
         4: "D - Balanced life."
       }
     },
-    addonSettings: {
-      name: "AddOn Settings per Preset?",
-      value: {
-        0: "No",
-        1: "Yes"
-      }
-    },
     adcSummation: {
       name: "ADC Channel Summation",
       value: {

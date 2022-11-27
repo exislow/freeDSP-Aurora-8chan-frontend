@@ -22,11 +22,15 @@
     }
   };
 
-  const stateSpdif = {
-    input: {
+  const stateSpdif = {};
+
+  function stateSpdifInit() {
+    stateSpdif.input = {
       selected: `0x0${spdifInput.toString(16)}`
-    }
+    };
   }
+
+  stateSpdifInit();
 
   async function updateConfigAddon() {
     $apiLoading = true;
@@ -38,6 +42,7 @@
       spdifInput = parseInt(stateSpdif.input.selected, 16);
     } else {
       toastErrorHttp(response);
+      stateSpdifInit();
     }
   }
 
@@ -52,6 +57,8 @@
       spdifOut.spdifright = outputChannel.right.selected;
     } else {
       toastErrorHttp(response);
+      outputChannel.left.selected = spdifOut.spdifleft;
+      outputChannel.right.selected = spdifOut.spdifright;
     }
   }
 </script>

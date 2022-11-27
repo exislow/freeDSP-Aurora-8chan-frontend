@@ -39,12 +39,15 @@
 
   const wifi = [wifiConnect, wifiAp];
 
-  const stateDevice = {
-    addon: configDevice.aid.toString(),
-    addonSettings: (1).toString(),
-    adcSummation: configDevice.adcsum.toString(),
-    volumePotentiometer: configDevice.vpot ? "1" : "0"
-  };
+  const stateDevice = {};
+
+  function stateDeviceInit() {
+    stateDevice.addon = configDevice.aid.toString();
+    stateDevice.adcSummation = configDevice.adcsum.toString();
+    stateDevice.volumePotentiometer = configDevice.vpot ? "1" : "0";
+  }
+
+  stateDeviceInit();
 
   async function updateDevice() {
     $apiLoading = true;
@@ -59,6 +62,7 @@
       configDevice.vpot = !!stateDevice.volumePotentiometer;
     } else {
       toastErrorHttp(response);
+      stateDeviceInit();
     }
   }
 

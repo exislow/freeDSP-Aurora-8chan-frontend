@@ -150,3 +150,11 @@ export async function spdifOutPost(outLeft, outRight) {
 
   return response;
 }
+
+export async function volumeMasterPost(volumeDb) {
+  const response = await apiPost(configSite.api.endpoint.volumeMaster, {
+    vol: volumeDb
+  });
+
+  return response;
+}
