@@ -19,3 +19,7 @@ export function toastError(msg) {
     }
   });
 }
+
+export function toastErrorHttp(response) {
+  toastError(`Error <strong>${response.status}</strong>: ${response.statusText}`);
+}

@@ -1,7 +1,7 @@
 <script>
   import { apiLoading } from "../helper/store.js";
   import { configAddonPost, spdifOutPost } from "../helper/api.js";
-  import { toastError, toastSuccess } from "../helper/toast.js";
+  import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
   import { configSpdifInput, outputAnalog, configChannelSource } from "../helper/constants.js";
 
   export let spdifOut = {};
@@ -37,7 +37,7 @@
       toastSuccess("S/PDIF input saved.");
       spdifInput = parseInt(stateSpdif.input.selected, 16);
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
   }
 
@@ -51,7 +51,7 @@
       spdifOut.spdifleft = outputChannel.left.selected;
       spdifOut.spdifright = outputChannel.right.selected;
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
   }
 </script>

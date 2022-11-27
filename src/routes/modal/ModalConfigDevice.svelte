@@ -2,7 +2,7 @@
   import { hardware } from "../helper/constants.js";
   import { apiLoading } from "../helper/store.js";
   import { deviceConfigPost, wifiApPost, wifiConnectPost } from "../helper/api.js";
-  import { toastSuccess, toastError } from "../helper/toast.js";
+  import { toastSuccess, toastErrorHttp } from "../helper/toast.js";
 
   export let configDevice = {};
   export let configWifi = {};
@@ -58,7 +58,7 @@
       configDevice.adcsum = parseInt(stateDevice.adcSummation);
       configDevice.vpot = !!stateDevice.volumePotentiometer;
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
   }
 
@@ -71,7 +71,7 @@
       toastSuccess(`${wifiConnect.name} config saved.`);
       configWifi.ssid = wifiConnect.form[0].value;
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
   }
 
@@ -84,7 +84,7 @@
       toastSuccess(`${wifiAp.name} config saved.`);
       configWifi.apname = wifiAp.form[0].value;
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
   }
 </script>

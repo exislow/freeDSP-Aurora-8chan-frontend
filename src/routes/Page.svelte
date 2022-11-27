@@ -12,7 +12,7 @@
     presetSwitchPost,
     spdifOutGet, volumeMasterGet
   } from "./helper/api.js";
-  import { toastError, toastSuccess } from "./helper/toast.js";
+  import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
 
   export let data;
   let volumeMaster = data.volumeMaster.vol;
@@ -55,7 +55,7 @@
 
       toastSuccess(`Preset switched to <strong>${data.channelNames.presets[presetId] || 'Preset ' + presetId}</strong>.`);
     } else {
-      toastError(response);
+      toastErrorHttp(response);
     }
 
     $apiLoading = false;
