@@ -4,6 +4,15 @@
   import { configPreset, configSite, modal, soundProcessor, configChannelSource } from "./helper/constants.js";
   import { filterActive, presetActive, apiLoading } from "./helper/store.js";
   import { modalOpen } from "./helper/modal.js";
+  import {
+    configAddonGet,
+    audioInputGet,
+    bypassAllGet,
+    configDeviceGet, fcAllGet,
+    presetSwitchPost,
+    spdifOutGet, volumeMasterGet
+  } from "./helper/api.js";
+  import { toastError, toastSuccess } from "./helper/toast.js";
 
   export let data;
   let volumeMaster = data.volumeMaster.vol;
@@ -36,16 +45,38 @@
     volumeMaster = state.volumeMaster;
   }
 
-  function presetChange(presetId) {
+  async function presetSwitch(presetId) {
     $apiLoading = true;
-    $presetActive = presetId;
+    const response = await presetSwitchPost(presetId);
+
+    if (response.ok) {
+      $presetActive = presetId;
+      const dataReloadState = await dataReload();
+
+      toastSuccess(`Preset switched to <strong>${data.channelNames.presets[presetId] || 'Preset ' + presetId}</strong>.`);
+    } else {
+      toastError(response);
+    }
+
     $apiLoading = false;
+  }
+
+  async function dataReload() {
+    data.configDevice = await configDeviceGet(fetch);
+    data.addonInput = await configAddonGet(fetch);
+    data.spdifOut = await spdifOutGet(fetch);
+    data.audioInput = await audioInputGet(fetch);
+    data.bypassAll = await bypassAllGet(fetch);
+    data.fcAll = await fcAllGet(fetch);
+    data.volumeMaster = await volumeMasterGet(fetch);
+
+    return true
   }
   </script>
 
 <svelte:head>
   <title>8 Channel | freeDSP Aurora</title>
-  <meta content="Svelte demo app" name="description" />
+  <meta content="8 Channel | freeDSP Aurora" name="description" />
 </svelte:head>
 
 <div class="card">
@@ -125,14 +156,14 @@
     <footer class="card-footer">
       {#each Object.entries(configPreset) as [id, name] (id)}
         {@const isActive = $presetActive == id ? true : false}
-        <button class="button is-info card-footer-item has-text-weight-bold" class:is-active={isActive} on:click={() => presetChange(id)}>{data.channelNames.presets[id] || name}</button>
+        <button class="button is-info card-footer-item has-text-weight-bold" class:is-active={isActive} on:click={() => presetSwitch(id)}>{data.channelNames.presets[id] || name}</button>
       {/each}
       <button class="button is-success card-footer-item has-text-weight-bold">Save</button>
     </footer>
   </div>
 </div>
 
-<ConfigSpdif bind:configAddon={data.configDevice.addcfg} bind:spdifOut={data.spdifOut} outputGeneric={configChannelSource} />
+<ConfigSpdif bind:spdifInput={data.addonInput.addcfg} bind:spdifOut={data.spdifOut} />
 
 <style>
     .button.is-multiline {

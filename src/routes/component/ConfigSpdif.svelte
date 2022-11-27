@@ -1,31 +1,13 @@
 <script>
+  import { apiLoading } from "../helper/store.js";
+  import { configAddonPost, spdifOutPost } from "../helper/api.js";
+  import { toastError, toastSuccess } from "../helper/toast.js";
+  import { configSpdifInput, outputAnalog, configChannelSource } from "../helper/constants.js";
+
   export let spdifOut = {};
-  export let configAddon = '';
-  export let outputGeneric;
+  export let spdifInput = '';
 
-  const input = {
-    "0x00": "TOSLINK 1",
-    "0x01": "TOSLINK 2",
-    "0x02": "TOSLINK 3",
-    "0x03": "TOSLINK 4",
-    "0x04": "Coax 1",
-    "0x05": "Coax 2",
-    "0x06": "Coax 3",
-    "0x07": "Coax 4"
-  };
-
-  const outputAnalog = {
-    "0x00050000": "Output 1",
-    "0x00050001": "Output 2",
-    "0x00050002": "Output 3",
-    "0x00050003": "Output 4",
-    "0x00050004": "Output 5",
-    "0x00050005": "Output 6",
-    "0x00050006": "Output 7",
-    "0x00050007": "Output 8"
-  };
-
-  const output = { ...outputGeneric, ...outputAnalog };
+  const output = { ...configChannelSource, ...outputAnalog };
 
   const outputChannel = {
     left: {
@@ -42,22 +24,35 @@
 
   const stateSpdif = {
     input: {
-      selected: `0x0${configAddon.toString(16)}`
+      selected: `0x0${spdifInput.toString(16)}`
     }
   }
 
-  function updateConfigAddon() {
-    // implement post
-    // if 200
-    configAddon = parseInt(stateSpdif.input.selected, 16);
+  async function updateConfigAddon() {
+    $apiLoading = true;
+    const response = await configAddonPost(stateSpdif.input.selected);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess("S/PDIF input saved.");
+      spdifInput = parseInt(stateSpdif.input.selected, 16);
+    } else {
+      toastError(response);
+    }
   }
 
-  function updateSpdifOut() {
-    // implement post
-    // if 200
-    console.log(outputChannel.left.selected, outputChannel.right.selected)
-    spdifOut.spdifleft = outputChannel.left.selected;
-    spdifOut.spdifright = outputChannel.right.selected;
+  async function updateSpdifOut() {
+    $apiLoading = true;
+    const response = await spdifOutPost(outputChannel.left.selected, outputChannel.right.selected);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess("S/PDIF output saved.");
+      spdifOut.spdifleft = outputChannel.left.selected;
+      spdifOut.spdifright = outputChannel.right.selected;
+    } else {
+      toastError(response);
+    }
   }
 </script>
 
@@ -75,7 +70,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select bind:value={stateSpdif.input.selected} on:change={updateConfigAddon}>
-                  {#each Object.entries(input) as [id, name] (id)}
+                  {#each Object.entries(configSpdifInput) as [id, name] (id)}
                     <option value="{id}">{name}</option>
                   {/each}
                 </select>

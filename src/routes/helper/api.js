@@ -33,6 +33,10 @@ export async function configDeviceGet(fetchFn = fetch) {
   return await apiGet(configSite.api.endpoint.configDevice, fetchFn);
 }
 
+export async function configAddonGet(fetchFn = fetch) {
+  return await apiGet(configSite.api.endpoint.configAddon, fetchFn);
+}
+
 export async function spdifOutGet(fetchFn = fetch) {
   return await apiGet(configSite.api.endpoint.spdifOut, fetchFn);
 }
@@ -116,6 +120,32 @@ export async function wifiConnectPost(ssid, password) {
   const response = await apiPost(configSite.api.endpoint.wifiConnect, {
     ssid: ssid,
     pwd: password
+  });
+
+  return response;
+}
+
+export async function presetSwitchPost(presetId) {
+  const response = await apiPost(configSite.api.endpoint.presetSwitch, {
+    pre: presetId
+  });
+
+  return response;
+}
+
+export async function configAddonPost(spdifInput) {
+  const response = await apiPost(configSite.api.endpoint.configAddon, {
+    len: 3,
+    i2c: ["0x82", "0x01", spdifInput]
+  });
+
+  return response;
+}
+
+export async function spdifOutPost(outLeft, outRight) {
+  const response = await apiPost(configSite.api.endpoint.spdifOut, {
+    spdifleft: outLeft,
+    spdifright: outRight
   });
 
   return response;

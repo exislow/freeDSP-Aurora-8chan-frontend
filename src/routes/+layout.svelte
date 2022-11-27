@@ -3,7 +3,7 @@
   import Header from "./component/Header.svelte";
   import Footer from "./component/Footer.svelte";
   import OverlayLoading from "./component/OverlayLoading.svelte";
-  import { modalActive, apiLoading } from "./helper/store.js";
+  import { modalActive, apiLoading, presetActive } from "./helper/store.js";
   import ModalFactory from "./modal/ModalFactory.svelte";
   import Page from "./Page.svelte";
   import { SvelteToast } from '@zerodevx/svelte-toast'
@@ -14,6 +14,7 @@
 
   if (typeof data == "object") {
     $apiLoading = false;
+    $presetActive = data.configDevice.pre;
   }
 
   const toastOptions = {

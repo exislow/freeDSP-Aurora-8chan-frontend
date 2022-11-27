@@ -1,14 +1,14 @@
 {
   "config": {
-      "aid": 2,
-      "vpot": false,
-      "fw": "v2.2.2",
-      "plugin": "v2.2.2",
-      "ip": "192.168.1.20",
-      "pre": 0,
-      "addcfg": 2,
-      "adcsum": 0,
-      "vinputs": false
+    "aid": 2,
+    "vpot": false,
+    "fw": "v2.2.2",
+    "plugin": "v2.2.2",
+    "ip": "192.168.1.20",
+    "pre": 1,
+    "addcfg": 2,
+    "adcsum": 0,
+    "vinputs": false
   },
   "spdifout": {
     "spdifleft": "0x00040000",
@@ -635,5 +635,8 @@
       "1",
       "1"
     ]
+  },
+  "addoncfg": {
+    "addcfg": 2
   }
 }

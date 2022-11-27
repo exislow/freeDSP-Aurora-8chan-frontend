@@ -34,6 +34,6 @@
 </div>
 <div class="columns">
   <div class="column">
-    <button class="button is-success is-fullwidth">Download Preset</button>
+    <a class="button is-success is-fullwidth" href="/preset.param" target="_blank" rel="external">Download Preset</a>
   </div>
 </div>

@@ -1,13 +1,13 @@
 import { dev } from "$app/environment";
 import {
-  highPassGet,
-  getLowPass,
-  getHighShelf,
-  lowShelfGet,
-  gainGet,
-  phaseGet,
   delayGet,
-  peqBankGet
+  gainGet,
+  getHighShelf,
+  getLowPass,
+  highPassGet,
+  lowShelfGet,
+  peqBankGet,
+  phaseGet
 } from "./api.js";
 
 export const configAudioFilter = {
@@ -73,6 +73,7 @@ export const configSite = {
     url: dev ? "http://localhost:3000" : "",
     endpoint: {
       configDevice: "config",
+      configAddon: "addoncfg",
       spdifOut: "spdifout",
       audioInput: "allinputs",
       bypassAll: "allbyp",
@@ -89,7 +90,8 @@ export const configSite = {
       gain: "gain?idx=",
       peqBank: "peqbank?idx=",
       wifiAp: "pwdap",
-      wifiConnect: "wifi"
+      wifiConnect: "wifi",
+      presetSwitch: "preset"
     }
   },
   volume: {
@@ -468,4 +470,24 @@ export const configChannelSource = {
   "0x00010007": "USB 8",
   "0x00040000": "S/PDIF L",
   "0x00040001": "S/PDIF R"
+};
+export const configSpdifInput = {
+  "0x00": "TOSLINK 1",
+  "0x01": "TOSLINK 2",
+  "0x02": "TOSLINK 3",
+  "0x03": "TOSLINK 4",
+  "0x04": "Coax 1",
+  "0x05": "Coax 2",
+  "0x06": "Coax 3",
+  "0x07": "Coax 4"
+};
+export const outputAnalog = {
+  "0x00050000": "Output 1",
+  "0x00050001": "Output 2",
+  "0x00050002": "Output 3",
+  "0x00050003": "Output 4",
+  "0x00050004": "Output 5",
+  "0x00050005": "Output 6",
+  "0x00050006": "Output 7",
+  "0x00050007": "Output 8"
 };

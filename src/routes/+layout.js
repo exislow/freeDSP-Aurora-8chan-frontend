@@ -1,4 +1,5 @@
 import {
+  configAddonGet,
   audioInputGet,
   bypassAllGet,
   channelNamesGet,
@@ -17,6 +18,7 @@ export const prerender = true;
 export async function load({ fetch }) {
   return {
     configDevice: await configDeviceGet(fetch),
+    addonInput: await configAddonGet(fetch),
     spdifOut: await spdifOutGet(fetch),
     audioInput: await audioInputGet(fetch),
     bypassAll: await bypassAllGet(fetch),
