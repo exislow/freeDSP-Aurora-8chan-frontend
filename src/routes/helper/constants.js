@@ -2,12 +2,19 @@ import { dev } from "$app/environment";
 import {
   delayGet,
   gainGet,
-  getHighShelf,
-  getLowPass,
+  highShelfGet,
+  lowPassGet,
   highPassGet,
+  highPassPost,
   lowShelfGet,
   peqBankGet,
-  phaseGet
+  phaseGet,
+  lowShelfPost,
+  highShelfPost,
+  lowPassPost,
+  phasePost,
+  delayPost,
+  gainPost
 } from "./api.js";
 
 export const configAudioFilter = {
@@ -173,7 +180,8 @@ export const soundProcessor = {
       fnName: filterFunctions.hp,
       idPrefix: "hp",
       api: {
-        get: highPassGet
+        get: highPassGet,
+        post: highPassPost
       },
       dom: [
         {
@@ -205,7 +213,8 @@ export const soundProcessor = {
       fnName: filterFunctions.lshelv,
       idPrefix: "ls",
       api: {
-        get: lowShelfGet
+        get: lowShelfGet,
+        post: lowShelfPost
       },
       dom: [
         {
@@ -286,7 +295,8 @@ export const soundProcessor = {
       fnName: filterFunctions.hshelv,
       idPrefix: "hs",
       api: {
-        get: getHighShelf
+        get: highShelfGet,
+        post: highShelfPost
       },
       dom: [
         {
@@ -326,7 +336,8 @@ export const soundProcessor = {
       fnName: filterFunctions.lp,
       idPrefix: "lp",
       api: {
-        get: getLowPass
+        get: lowPassGet,
+        post: lowPassPost
       },
       dom: [
         {
@@ -358,7 +369,8 @@ export const soundProcessor = {
       fnName: filterFunctions.phase,
       idPrefix: "ph",
       api: {
-        get: phaseGet
+        get: phaseGet,
+        post: phasePost
       },
       dom: [
         {
@@ -391,7 +403,8 @@ export const soundProcessor = {
       fnName: filterFunctions.delay,
       idPrefix: "dly",
       api: {
-        get: delayGet
+        get: delayGet,
+        post: delayPost
       },
       dom: [
         {
@@ -417,7 +430,8 @@ export const soundProcessor = {
       fnName: filterFunctions.gain,
       idPrefix: "gn",
       api: {
-        get: gainGet
+        get: gainGet,
+        post: gainPost
       },
       dom: [
         {

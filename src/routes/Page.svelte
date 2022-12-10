@@ -1,5 +1,5 @@
 <script>
-  import { extractFc, isBypassActive, range } from "./helper/range.js";
+  import { bypassSet, extractFc, isBypassActive, range } from "./helper/range.js";
   import ConfigSpdif from "./component/ConfigSpdif.svelte";
   import { configPreset, configSite, modal, soundProcessor, configChannelSource } from "./helper/constants.js";
   import { filterActive, presetActive, apiLoading } from "./helper/store.js";
@@ -15,6 +15,7 @@
   import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
 
   export let data;
+  let thisMuteButton = {};
   let volumeMaster = data.volumeMaster.vol;
 
   const state = {
@@ -80,6 +81,39 @@
 
     return true
   }
+
+  async function muteToggle(channelId, idBypass, allBypass, apis) {
+    $apiLoading = true;
+    const data = await apis.get(channelId);
+    let bypass = "0";
+
+    if (channelId == "gain") {
+      bypass = data.mute = data.mute == "0" ? "1" : "0";
+    } else {
+      bypass = data.bypass = data.bypass == "0" ? "1" : "0";
+    }
+
+    const response = await apis.post(data);
+    $apiLoading = false;
+
+    if (response.ok) {
+      let notifyString = "";
+
+      if (bypass == "1") {
+        notifyString = "activated";
+        thisMuteButton[idBypass].classList.remove("is-outlined");
+      } else {
+        notifyString = "deactivated";
+        thisMuteButton[idBypass].classList.add("is-outlined");
+      }
+
+      toastSuccess(`Bypass ${notifyString}.`);
+      bypassSet(idBypass, allBypass, bypass);
+    } else {
+      toastErrorHttp(response);
+      state.volumeMaster = volumeMaster;
+    }
+  }
   </script>
 
 <svelte:head>
@@ -90,6 +124,7 @@
 <div class="card">
   <div class="card-content">
     <div class="content">
+      <!-- Input generator -->
       {#each range(0, soundProcessor.countChannel, 1) as num (num)}
         <div class="columns is-variable is-1 mb-0 is-vcentered">
           <div class="column is-fullwidth">
@@ -107,7 +142,9 @@
             </div>
           </div>
 
+          <!-- Sound blocks generator --->
           {#each Object.entries(soundProcessor.soundBlocks) as [name, definition], index (name)}
+            {@const idSoundBlock = definition.idPrefix + num}
             <div class="column">
               <div class="field has-addons">
                 <button
@@ -121,8 +158,9 @@
                 </button>
 
                 {#if name !== 'phase'}
-                  <button class="button is-danger is-multiline"
-                          class:is-outlined={isBypassActive(definition.idPrefix + num, data.bypassAll.byp) === 0}>
+                  {@const isOutline = isBypassActive(definition.idPrefix + num, data.bypassAll.byp) === 0}
+                  <button bind:this={thisMuteButton[idSoundBlock]} class="button is-danger is-multiline"
+                          class:is-outlined={isOutline} on:click={() => muteToggle(num, idSoundBlock, data.bypassAll.byp, definition.api,)}>
                       <span class="icon is-small">
                         <i class="fas fa-volume-off"></i>
                       </span>
@@ -132,6 +170,7 @@
             </div>
           {/each}
 
+          <!-- Output -->
           <div class="column">
             <button class="button is-static is-fullwidth">
               {data.channelNames.outputs[num] || "Out " + num + 1}
@@ -141,6 +180,7 @@
         </div>
       {/each}
 
+      <!-- Volume control -->
       <div class="columns is-centered is-vcentered">
         <div class="column is-1 has-text-right">
           <label class="label">Volume</label>
@@ -161,6 +201,7 @@
       </div>
     </div>
 
+    <!-- Preset selection -->
     <footer class="card-footer">
       {#each Object.entries(configPreset) as [id, name] (id)}
         {@const isActive = $presetActive == id ? true : false}

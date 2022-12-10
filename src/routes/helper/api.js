@@ -69,28 +69,69 @@ export async function highPassGet(index) {
   return await apiGet(`${configSite.api.endpoint.highPass}${index}`);
 }
 
-export async function getLowPass(index) {
+export async function highPassPost(data) {
+  const response = await apiPost(configSite.api.endpoint.highPass, data);
+
+  return response;
+}
+
+export async function lowPassGet(index) {
   return await apiGet(`${configSite.api.endpoint.lowPass}${index}`);
 }
 
-export async function getHighShelf(index) {
+export async function lowPassPost(data) {
+  const response = await apiPost(configSite.api.endpoint.lowPass, data);
+
+  return response;
+}
+
+export async function highShelfGet(index) {
   return await apiGet(`${configSite.api.endpoint.highShelf}${index}`);
 }
 
+export async function highShelfPost(data) {
+  const response = await apiPost(configSite.api.endpoint.highShelf, data);
+
+  return response;
+}
 export async function lowShelfGet(index) {
   return await apiGet(`${configSite.api.endpoint.lowShelf}${index}`);
+}
+
+export async function lowShelfPost(data) {
+  const response = await apiPost(configSite.api.endpoint.lowShelf, data);
+
+  return response;
 }
 
 export async function phaseGet(index) {
   return await apiGet(`${configSite.api.endpoint.phase}${index}`);
 }
 
+export async function phasePost(data) {
+  const response = await apiPost(configSite.api.endpoint.phase, data);
+
+  return response;
+}
+
 export async function delayGet(index) {
   return await apiGet(`${configSite.api.endpoint.delay}${index}`);
 }
 
+export async function delayPost(data) {
+  const response = await apiPost(configSite.api.endpoint.delay, data);
+
+  return response;
+}
+
 export async function gainGet(index) {
   return await apiGet(`${configSite.api.endpoint.gain}${index}`);
+}
+
+export async function gainPost(data) {
+  const response = await apiPost(configSite.api.endpoint.gain, data);
+
+  return response;
 }
 
 export async function peqBankGet(index) {
