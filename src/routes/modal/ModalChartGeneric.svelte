@@ -14,10 +14,11 @@
   } from "chart.js";
   import { canvasBgColor, cOptions, cursorVerticalLine } from "../helper/chartJs.js";
   import Fili from "fili";
-  import { logspace, range } from "../helper/range.js";
+  import { bypassSet, logspace, range } from "../helper/range.js";
   import { configSite, filterFunctions, soundProcessor } from "../helper/constants.js";
   import { apiLoading } from "../helper/store.js";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
+  import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
@@ -29,6 +30,7 @@
   export let fcAll;
   export let bypassAll;
 
+  // Get sound block information and create a general binding object.
   $apiLoading = true;
   const soundBlockItem = soundProcessor.soundBlocks[filter.id];
   let apiSoundBlockData;
@@ -44,6 +46,7 @@
   };
   const filterPass = [filterFunctions.lp, filterFunctions.hp];
 
+  // Receive data from API and map the value to internal binding.
   onMount(async () => {
     apiSoundBlockData = await soundBlockItem.api.get(filter.channelNumber);
     binding.fcHz = apiSoundBlockData.fc ? apiSoundBlockData.fc : false;
@@ -120,6 +123,54 @@
 
   function bypassToggle() {
     binding.isBypass = binding.isBypass == "1" ? "0" : "1";
+
+    if (apiSoundBlockData.mute) {
+      apiSoundBlockData.mute = binding.isBypass;
+    } else {
+      apiSoundBlockData["bypass"] = binding.isBypass;
+    }
+
+    settingsSave(apiSoundBlockData);
+  }
+
+  async function settingsSave(settingsSound = false) {
+    $apiLoading = true;
+
+    if (settingsSound === false) {
+      // Replace original sound block data from API with the data of the internal model.
+      for (const [key, value] of Object.entries(apiSoundBlockData)) {
+        apiSoundBlockData[key] = binding[configSite.api.mapping.externalToInternal[key]];
+      }
+    } else {
+      apiSoundBlockData = settingsSound;
+    }
+
+    const response = await soundBlockItem.api.post(filter.channelNumber, apiSoundBlockData);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess("Sound settings stored successfully.");
+
+      if (binding.isBypass == "1") {
+        document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList.remove("is-outlined");
+      } else {
+        document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList.add("is-outlined");
+      }
+
+      bypassSet(`${filter.id}${filter.channelNumber}`, bypassAll.byp, binding.isBypass);
+      // TODO: Update fcAll
+      requestReloadFcAll();
+    } else {
+      toastErrorHttp(response);
+    }
+  }
+
+  const dispatch = createEventDispatcher();
+
+  function requestReloadFcAll() {
+    dispatch('reloadFcAll', {
+      fullReload: true
+    });
   }
 </script>
 
@@ -133,6 +184,7 @@
         />
       </div>
 
+      <!-- only if sound block is PEQ Bank -->
       <div class="content">
         {#if soundBlockItem.idPrefix === "peqbank"}
           {@const itemsMax = 5}
@@ -176,7 +228,7 @@
               </div>
             {/each}
           {/each}
-
+        <!-- for all other soundblocks -->
         {:else}
           <div class="columns">
             {#each soundBlockItem.dom as domItem, index (index)}
@@ -215,7 +267,7 @@
       </div>
     </div>
     <footer class="card-footer">
-      <button class="button card-footer-item is-primary">Save</button>
+      <button class="button card-footer-item is-primary" on:click|preventDefault={() => settingsSave()}>Save</button>
     </footer>
   </form>
 </div>

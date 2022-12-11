@@ -66,70 +66,70 @@ export async function configWifiGet(fetchFn = fetch) {
 }
 
 export async function highPassGet(index) {
-  return await apiGet(`${configSite.api.endpoint.highPass}${index}`);
+  return await apiGet(configSite.api.endpoint.highPass + index);
 }
 
-export async function highPassPost(data) {
-  const response = await apiPost(configSite.api.endpoint.highPass, data);
+export async function highPassPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.highPass + index, data);
 
   return response;
 }
 
 export async function lowPassGet(index) {
-  return await apiGet(`${configSite.api.endpoint.lowPass}${index}`);
+  return await apiGet(configSite.api.endpoint.lowPass + index);
 }
 
-export async function lowPassPost(data) {
-  const response = await apiPost(configSite.api.endpoint.lowPass, data);
+export async function lowPassPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.lowPass + index, data);
 
   return response;
 }
 
 export async function highShelfGet(index) {
-  return await apiGet(`${configSite.api.endpoint.highShelf}${index}`);
+  return await apiGet(configSite.api.endpoint.highShelf + index);
 }
 
-export async function highShelfPost(data) {
-  const response = await apiPost(configSite.api.endpoint.highShelf, data);
+export async function highShelfPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.highShelf + index, data);
 
   return response;
 }
 export async function lowShelfGet(index) {
-  return await apiGet(`${configSite.api.endpoint.lowShelf}${index}`);
+  return await apiGet(configSite.api.endpoint.lowShelf + index);
 }
 
-export async function lowShelfPost(data) {
-  const response = await apiPost(configSite.api.endpoint.lowShelf, data);
+export async function lowShelfPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.lowShelf + index, data);
 
   return response;
 }
 
 export async function phaseGet(index) {
-  return await apiGet(`${configSite.api.endpoint.phase}${index}`);
+  return await apiGet(configSite.api.endpoint.phase + index);
 }
 
-export async function phasePost(data) {
-  const response = await apiPost(configSite.api.endpoint.phase, data);
+export async function phasePost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.phase + index, data);
 
   return response;
 }
 
 export async function delayGet(index) {
-  return await apiGet(`${configSite.api.endpoint.delay}${index}`);
+  return await apiGet(configSite.api.endpoint.delay + index);
 }
 
-export async function delayPost(data) {
-  const response = await apiPost(configSite.api.endpoint.delay, data);
+export async function delayPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.delay + index, data);
 
   return response;
 }
 
 export async function gainGet(index) {
-  return await apiGet(`${configSite.api.endpoint.gain}${index}`);
+  return await apiGet(configSite.api.endpoint.gain + index);
 }
 
-export async function gainPost(data) {
-  const response = await apiPost(configSite.api.endpoint.gain, data);
+export async function gainPost(index, data) {
+  const response = await apiPost(configSite.api.endpoint.gain + index, data);
 
   return response;
 }

@@ -7,6 +7,7 @@
   import ModalFactory from "./modal/ModalFactory.svelte";
   import Page from "./Page.svelte";
   import { SvelteToast } from '@zerodevx/svelte-toast'
+  import { fcAllGet } from "./helper/api.js";
 
   $apiLoading = true;
   /** @type {import('./$types').LayoutData} */
@@ -25,6 +26,12 @@
     intro: { y: 192 },    // toast intro fly animation settings
     reversed: true
   };
+
+  async function fcAllReload() {
+    data.fcAll = await fcAllGet(fetch);
+
+    return true
+  }
 </script>
 
 <div class="container">
@@ -38,7 +45,7 @@
 
     <Footer bind:configDevice={data.configDevice} />
     {#if $modalActive }
-      <ModalFactory bind:modalActive={$modalActive} bind:data={data}/>
+      <ModalFactory bind:modalActive={$modalActive} bind:data={data} on:reloadFcAll={fcAllReload} />
     {/if}
     {#if $apiLoading}
       <OverlayLoading />

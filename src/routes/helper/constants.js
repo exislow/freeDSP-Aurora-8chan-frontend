@@ -99,6 +99,20 @@ export const configSite = {
       wifiAp: "pwdap",
       wifiConnect: "wifi",
       presetSwitch: "preset"
+    },
+    mapping: {
+      externalToInternal: {
+        fc: "fcHz",
+        typ: "filterId",
+        slope: "slope",
+        gain: "gainDb",
+        V0: "gainDb",
+        bypass: "isBypass",
+        mute: "isBypass",
+        Q: "q",
+        inv: "invert",
+        dly: "delayMs"
+      }
     }
   },
   volume: {

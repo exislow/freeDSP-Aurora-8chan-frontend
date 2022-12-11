@@ -54,7 +54,7 @@
       {:else if modalActive === modal.preset.id}
         <ModalPreset />
       {:else if modalActive === modal.chartGeneric.id}
-        <ModalChartGeneric filter={$filterActive} bind:fcAll={data.fcAll} bind:bypassAll={data.bypassAll} />
+        <ModalChartGeneric filter={$filterActive} bind:fcAll={data.fcAll} bind:bypassAll={data.bypassAll} on:reloadFcAll />
       {/if}
     </section>
   </div>

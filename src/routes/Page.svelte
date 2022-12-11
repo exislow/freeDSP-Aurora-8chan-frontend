@@ -82,7 +82,7 @@
     return true
   }
 
-  async function muteToggle(channelId, idBypass, allBypass, apis) {
+  async function muteToggle(channelId, bypassId, bypassAll, apis) {
     $apiLoading = true;
     const data = await apis.get(channelId);
     let bypass = "0";
@@ -101,17 +101,16 @@
 
       if (bypass == "1") {
         notifyString = "activated";
-        thisMuteButton[idBypass].classList.remove("is-outlined");
+        thisMuteButton[bypassId].classList.remove("is-outlined");
       } else {
         notifyString = "deactivated";
-        thisMuteButton[idBypass].classList.add("is-outlined");
+        thisMuteButton[bypassId].classList.add("is-outlined");
       }
 
       toastSuccess(`Bypass ${notifyString}.`);
-      bypassSet(idBypass, allBypass, bypass);
+      bypassSet(bypassId, bypassAll, bypass);
     } else {
       toastErrorHttp(response);
-      state.volumeMaster = volumeMaster;
     }
   }
   </script>
@@ -159,7 +158,7 @@
 
                 {#if name !== 'phase'}
                   {@const isOutline = isBypassActive(definition.idPrefix + num, data.bypassAll.byp) === 0}
-                  <button bind:this={thisMuteButton[idSoundBlock]} class="button is-danger is-multiline"
+                  <button bind:this={thisMuteButton[idSoundBlock]} id="{`${idSoundBlock}Mute`}" class="button is-danger is-multiline"
                           class:is-outlined={isOutline} on:click={() => muteToggle(num, idSoundBlock, data.bypassAll.byp, definition.api,)}>
                       <span class="icon is-small">
                         <i class="fas fa-volume-off"></i>
