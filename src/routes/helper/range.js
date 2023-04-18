@@ -92,8 +92,15 @@ export function isBypassActive(idBypass, allBypass) {
   return value;
 }
 
-export function bypassSet(bypassId, bypassAll, value) {
-  console.log(bypassId, bypassAll, value);
+export function bypassFind(bypassId, bypassAll) {
   const obj = bypassAll.find((o) => o.name === bypassId);
+
+  return obj;
+}
+
+export function bypassSet(bypassId, bypassAll, value) {
+  const obj = bypassFind(bypassId, bypassAll);
   obj.val = value;
+
+  return obj;
 }

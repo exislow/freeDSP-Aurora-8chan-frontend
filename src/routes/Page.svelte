@@ -1,5 +1,5 @@
 <script>
-  import { bypassSet, extractFc, isBypassActive, range } from "./helper/range.js";
+  import { bypassFind, bypassSet, extractFc, isBypassActive, range } from "./helper/range.js";
   import ConfigSpdif from "./component/ConfigSpdif.svelte";
   import { configPreset, configSite, modal, soundProcessor, configChannelSource } from "./helper/constants.js";
   import { filterActive, presetActive, apiLoading } from "./helper/store.js";
@@ -84,16 +84,25 @@
 
   async function muteToggle(channelId, bypassId, bypassAll, apis) {
     $apiLoading = true;
-    const data = await apis.get(channelId);
+    const dataChannel = await apis.get(channelId);
     let isBypass = "0";
 
     if (channelId == "gain") {
-      isBypass = data.mute = data.mute == "0" ? "1" : "0";
+      isBypass = dataChannel.mute = dataChannel.mute == "0" ? "1" : "0";
     } else {
-      isBypass = data.bypass = data.bypass == "0" ? "1" : "0";
+      if (soundProcessor.soundBlocks.peqbank.idPrefix + channelId == bypassId) {
+        // Check aggregated bypass state (only for PEQ Bank) and decide using this value how to toggle.
+        const bypassValueCurrent = bypassFind(bypassId, bypassAll).val;
+        const bypassValueNew = new Array(dataChannel.numbands);
+        dataChannel.bypass = bypassValueCurrent == "0" ? bypassValueNew.fill("1") : bypassValueNew.fill("0");
+        isBypass = bypassValueCurrent == "0" ? "1" : "0";
+        console.log(bypassValueCurrent, isBypass);
+      } else {
+        isBypass = dataChannel.bypass = dataChannel.bypass == "0" ? "1" : "0";
+      }
     }
 
-    const response = await apis.post(data);
+    const response = await apis.post(channelId, dataChannel);
     $apiLoading = false;
 
     if (response.ok) {

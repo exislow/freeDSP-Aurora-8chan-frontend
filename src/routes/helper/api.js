@@ -155,7 +155,7 @@ export async function peqBankGet(index) {
 export async function peqBankPost(index, data) {
   data.idx = index;
   data.numbands = soundProcessor.soundBlocks.peqbank.bandsCount;
-  const response = await apiPost(configSite.api.endpoint.peqBank, data);
+  const response = await apiPost(`${configSite.api.endpoint.peqBank}${index}`, data);
 
   return response;
 }
