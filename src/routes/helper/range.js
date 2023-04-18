@@ -81,8 +81,14 @@ export function extractFc(idFc, allFc) {
   return value;
 }
 
-export function isBypassActive(idBypass, allBypass) {
-  const obj = allBypass.find((o) => o.name === idBypass);
+export function bypassFind(bypassId, bypassAll) {
+  const obj = bypassAll.find((o) => o.name === bypassId);
+
+  return obj;
+}
+
+export function isBypassActive(bypassId, bypassAll) {
+  const obj = bypassFind(bypassId, bypassAll);
   let value = 0;
 
   if (obj) {
@@ -90,12 +96,6 @@ export function isBypassActive(idBypass, allBypass) {
   }
 
   return value;
-}
-
-export function bypassFind(bypassId, bypassAll) {
-  const obj = bypassAll.find((o) => o.name === bypassId);
-
-  return obj;
 }
 
 export function bypassSet(bypassId, bypassAll, value) {

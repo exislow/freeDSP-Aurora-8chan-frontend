@@ -1,5 +1,5 @@
 <script>
-  import { bypassFind, bypassSet, extractFc, isBypassActive, range } from "./helper/range.js";
+  import { bypassSet, extractFc, isBypassActive, range } from "./helper/range.js";
   import ConfigSpdif from "./component/ConfigSpdif.svelte";
   import { configPreset, configSite, modal, soundProcessor, configChannelSource } from "./helper/constants.js";
   import { filterActive, presetActive, apiLoading } from "./helper/store.js";
@@ -92,11 +92,10 @@
     } else {
       if (soundProcessor.soundBlocks.peqbank.idPrefix + channelId == bypassId) {
         // Check aggregated bypass state (only for PEQ Bank) and decide using this value how to toggle.
-        const bypassValueCurrent = bypassFind(bypassId, bypassAll).val;
+        const bypassValueCurrent = isBypassActive(bypassId, bypassAll);
         const bypassValueNew = new Array(dataChannel.numbands);
         dataChannel.bypass = bypassValueCurrent == "0" ? bypassValueNew.fill("1") : bypassValueNew.fill("0");
         isBypass = bypassValueCurrent == "0" ? "1" : "0";
-        console.log(bypassValueCurrent, isBypass);
       } else {
         isBypass = dataChannel.bypass = dataChannel.bypass == "0" ? "1" : "0";
       }
@@ -169,7 +168,7 @@
                 {#if name !== 'phase'}
                   {@const isOutline = isBypassActive(definition.idPrefix + num, data.bypassAll.byp) === 0}
                   <button bind:this={thisMuteButton[idSoundBlock]} id="{`${idSoundBlock}Mute`}" class="button is-danger is-multiline"
-                          class:is-outlined={isOutline} on:click={() => muteToggle(num, idSoundBlock, data.bypassAll.byp, definition.api,)}>
+                          class:is-outlined={isOutline} on:click={() => muteToggle(num, idSoundBlock, data.bypassAll.byp, definition.api)}>
                       <span class="icon is-small">
                         <i class="fas fa-volume-off"></i>
                       </span>
