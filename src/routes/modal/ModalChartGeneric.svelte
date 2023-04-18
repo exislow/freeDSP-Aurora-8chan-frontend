@@ -121,8 +121,13 @@
     ]
   };
 
-  function bypassToggle() {
-    binding.isBypass = binding.isBypass == "1" ? "0" : "1";
+  function bypassToggle(index = false) {
+    // PEQ banks have an array of bypasses
+    if (index) {
+      binding.isBypass[index] = binding.isBypass[index] == "1" ? "0" : "1";
+    } else {
+      binding.isBypass = binding.isBypass == "1" ? "0" : "1";
+    }
 
     if (apiSoundBlockData.mute) {
       apiSoundBlockData.mute = binding.isBypass;
@@ -151,14 +156,29 @@
     if (response.ok) {
       toastSuccess("Sound settings stored successfully.");
 
-      if (binding.isBypass == "1") {
-        document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList.remove("is-outlined");
+      let isBypass = "0";
+
+      // Check, if all banks are bypassed
+      if (soundBlockItem.idPrefix === "peqbank") {
+        isBypass = binding.isBypass.every((val, i, arr) => val === arr[0]) ? "1" : "0";
       } else {
-        document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList.add("is-outlined");
+        isBypass = binding.isBypass;
       }
 
-      bypassSet(`${filter.id}${filter.channelNumber}`, bypassAll.byp, binding.isBypass);
-      // TODO: Update fcAll
+      // Modify mute button class of main page.
+      console.log('byp', isBypass)
+      const elemMuteClassList = document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList;
+
+      if (isBypass == "1") {
+        console.log('byp remove', isBypass)
+        elemMuteClassList.remove("is-outlined");
+      } else {
+        elemMuteClassList.add("is-outlined");
+      }
+
+      // Update bypass data model
+      bypassSet(`${filter.id}${filter.channelNumber}`, bypassAll.byp, isBypass);
+      // Fetch FcAll data model in background to update main page values (too lazy to update the FcAll data model myself).
       requestReloadFcAll();
     } else {
       toastErrorHttp(response);
@@ -188,7 +208,7 @@
       <div class="content">
         {#if soundBlockItem.idPrefix === "peqbank"}
           {@const itemsMax = 5}
-          {#each range(0, soundBlockItem.domMultiplier / itemsMax, 1) as page (page)}
+          {#each range(0, soundBlockItem.bandsCount / itemsMax, 1) as page (page)}
             {@const itemsStart = itemsMax * page}
             {@const itemsEnd = itemsMax + itemsStart}
             <div class="columns">
@@ -215,7 +235,7 @@
                         {:else if domItem.element == "button"}
                           <button class="button is-danger is-multiline is-fullwidth"
                                   class:is-outlined={binding[domItem.model][num] == 0}
-                                  on:click|preventDefault={bypassToggle} tabindex="{`1${page}${num}${index}`}">
+                                  on:click|preventDefault={() => bypassToggle(num)} tabindex="{`1${page}${num}${index}`}">
                             <span class="icon is-small">
                               <i class="fas fa-volume-off"></i>
                             </span>
@@ -252,7 +272,7 @@
                       </div>
                     {:else if domItem.element == "button"}
                       <button class="button is-danger is-multiline is-fullwidth"
-                              class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={bypassToggle}>
+                              class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={() => bypassToggle()}>
                           <span class="icon is-small">
                             <i class="fas fa-volume-off"></i>
                           </span>

@@ -52,7 +52,7 @@
       {#if modalActive === modal.configDevice.id }
         <ModalConfigDevice bind:configDevice={data.configDevice} bind:configWifi={data.configWifi} />
       {:else if modalActive === modal.preset.id}
-        <ModalPreset />
+        <ModalPreset presetIdSelected={data.configDevice.pre} presets={data.channelNames.presets} />
       {:else if modalActive === modal.chartGeneric.id}
         <ModalChartGeneric filter={$filterActive} bind:fcAll={data.fcAll} bind:bypassAll={data.bypassAll} on:reloadFcAll />
       {/if}

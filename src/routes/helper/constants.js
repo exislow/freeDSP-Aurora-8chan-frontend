@@ -14,7 +14,8 @@ import {
   lowPassPost,
   phasePost,
   delayPost,
-  gainPost
+  gainPost,
+  peqBankPost
 } from "./api.js";
 
 export const configAudioFilter = {
@@ -98,7 +99,8 @@ export const configSite = {
       peqBank: "peqbank?idx=",
       wifiAp: "pwdap",
       wifiConnect: "wifi",
-      presetSwitch: "preset"
+      presetSwitch: "preset",
+      upload: "upload?fname="
     },
     mapping: {
       externalToInternal: {
@@ -268,7 +270,8 @@ export const soundProcessor = {
       fnName: filterFunctions.peqbank,
       idPrefix: "peqbank",
       api: {
-        get: peqBankGet
+        get: peqBankGet,
+        post: peqBankPost
       },
       dom: [
         {
@@ -298,7 +301,7 @@ export const soundProcessor = {
           model: "isBypass"
         }
       ],
-      domMultiplier: 10
+      bandsCount: 10
     },
     hshelv: {
       name: {

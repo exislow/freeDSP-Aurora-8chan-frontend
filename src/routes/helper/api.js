@@ -1,4 +1,4 @@
-import { configSite } from "./constants.js";
+import { configSite, soundProcessor } from "./constants.js";
 
 export async function apiFetch(endpoint, options, fetchFn = fetch) {
   const response = await fetchFn(`${configSite.api.url}/${endpoint}`, options);
@@ -23,8 +23,22 @@ export async function apiPost(endpoint, data, fetchFn = fetch) {
     },
     body: JSON.stringify(data)
   };
+  console.log("API post req", data);
   const response = await apiFetch(endpoint, options, fetchFn);
-  console.log("API post", response);
+  console.log("API post resp", response);
+
+  return response;
+}
+
+export async function apiPostFile(endpoint, file, fetchFn = fetch) {
+  const options = {
+    method: "POST",
+    headers: {},
+    body: file
+  };
+  console.log("API post file req", file);
+  const response = await apiFetch(endpoint, options, fetchFn);
+  console.log("API post file resp", response);
 
   return response;
 }
@@ -138,6 +152,14 @@ export async function peqBankGet(index) {
   return await apiGet(`${configSite.api.endpoint.peqBank}${index}`);
 }
 
+export async function peqBankPost(index, data) {
+  data.idx = index;
+  data.numbands = soundProcessor.soundBlocks.peqbank.bandsCount;
+  const response = await apiPost(configSite.api.endpoint.peqBank, data);
+
+  return response;
+}
+
 export async function deviceConfigPost(addon, adcSummation, volumePotentiometer) {
   const response = await apiPost(configSite.api.endpoint.configDevice, {
     aid: addon,
@@ -196,6 +218,12 @@ export async function volumeMasterPost(volumeDb) {
   const response = await apiPost(configSite.api.endpoint.volumeMaster, {
     vol: volumeDb
   });
+
+  return response;
+}
+
+export async function presetFilePost(index, file) {
+  const response = await apiPostFile(configSite.api.endpoint.upload + "usrparam.00" + index, file);
 
   return response;
 }

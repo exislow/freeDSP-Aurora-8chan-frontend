@@ -85,12 +85,12 @@
   async function muteToggle(channelId, bypassId, bypassAll, apis) {
     $apiLoading = true;
     const data = await apis.get(channelId);
-    let bypass = "0";
+    let isBypass = "0";
 
     if (channelId == "gain") {
-      bypass = data.mute = data.mute == "0" ? "1" : "0";
+      isBypass = data.mute = data.mute == "0" ? "1" : "0";
     } else {
-      bypass = data.bypass = data.bypass == "0" ? "1" : "0";
+      isBypass = data.bypass = data.bypass == "0" ? "1" : "0";
     }
 
     const response = await apis.post(data);
@@ -98,17 +98,18 @@
 
     if (response.ok) {
       let notifyString = "";
+      const muteElemClassList = thisMuteButton[bypassId].classList;
 
-      if (bypass == "1") {
+      if (isBypass == "1") {
         notifyString = "activated";
-        thisMuteButton[bypassId].classList.remove("is-outlined");
+        muteElemClassList.remove("is-outlined");
       } else {
         notifyString = "deactivated";
-        thisMuteButton[bypassId].classList.add("is-outlined");
+        muteElemClassList.add("is-outlined");
       }
 
       toastSuccess(`Bypass ${notifyString}.`);
-      bypassSet(bypassId, bypassAll, bypass);
+      bypassSet(bypassId, bypassAll, isBypass);
     } else {
       toastErrorHttp(response);
     }
