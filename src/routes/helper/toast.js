@@ -20,6 +20,16 @@ export function toastError(msg) {
   });
 }
 
+export function toastWarning(msg) {
+  toast.push(msg, {
+    theme: {
+      "--toastColor": "#fff",
+      "--toastBackground": "rgb(231,146,60)",
+      "--toastBarBackground": "rgb(219,107,22)"
+    }
+  });
+}
+
 export function toastErrorHttp(response) {
   toastError(`Error <strong>${response.status}</strong>: ${response.statusText}`);
 }

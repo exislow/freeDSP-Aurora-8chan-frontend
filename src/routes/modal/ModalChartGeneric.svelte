@@ -19,6 +19,7 @@
   import { apiLoading } from "../helper/store.js";
   import { createEventDispatcher, onMount } from "svelte";
   import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
+  import { rewPeqParse } from "../helper/filterAudio.js";
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
   ChartJS.defaults.backgroundColor = "#2D3748"; // doesn't work somehow
@@ -121,6 +122,7 @@
     ]
   };
 
+  // TODO: Refactor. Almost the same code can be found at `Page.svelte`.
   function bypassToggle(index = false) {
     // PEQ banks have an array of bypasses
     if (index) {
@@ -166,11 +168,11 @@
       }
 
       // Modify mute button class of main page.
-      console.log('byp', isBypass)
+      console.log("byp", isBypass);
       const elemMuteClassList = document.getElementById(`${filter.id}${filter.channelNumber}Mute`).classList;
 
       if (isBypass == "1") {
-        console.log('byp remove', isBypass)
+        console.log("byp remove", isBypass);
         elemMuteClassList.remove("is-outlined");
       } else {
         elemMuteClassList.add("is-outlined");
@@ -188,10 +190,31 @@
   const dispatch = createEventDispatcher();
 
   function requestReloadFcAll() {
-    dispatch('reloadFcAll', {
+    dispatch("reloadFcAll", {
       fullReload: true
     });
   }
+
+  // Display filename of selected REW PEQ file.
+  let filesRewPeq = null;
+  let fileNameRewPeq = "No file selected.";
+  $: if (filesRewPeq) {
+    fileNameRewPeq = filesRewPeq[0].name;
+    rewPeqUpload(filesRewPeq[0]);
+  }
+  export async function rewPeqUpload(fileRewPeq) {
+    let text = await fileRewPeq.text();
+    let filter = rewPeqParse(text, fileNameRewPeq);
+
+    (await filter).forEach((item, index) => {
+      if (item) {
+        binding.fcHz[index] = item.fcHz;
+        binding.gainDb[index] = item.gainDb;
+        binding.q[index] = item.q;
+      }
+    });
+  }
+
 </script>
 
 <div class="card">
@@ -235,7 +258,8 @@
                         {:else if domItem.element == "button"}
                           <button class="button is-danger is-multiline is-fullwidth"
                                   class:is-outlined={binding[domItem.model][num] == 0}
-                                  on:click|preventDefault={() => bypassToggle(num)} tabindex="{`1${page}${num}${index}`}">
+                                  on:click|preventDefault={() => bypassToggle(num)}
+                                  tabindex="{`1${page}${num}${index}`}">
                             <span class="icon is-small">
                               <i class="fas fa-volume-off"></i>
                             </span>
@@ -248,7 +272,31 @@
               </div>
             {/each}
           {/each}
-        <!-- for all other soundblocks -->
+          <div class="columns">
+            <div class="column">
+              <span class="is-bold">Import your PEQ filter file.</span>
+              <span class="is-italic">Note: Only REW text export format is supported.</span>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <div class="file has-name is-fullwidth is-info">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="filesRewPeq" bind:files={filesRewPeq} accept="text/plain">
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Choose a file…
+                    </span>
+                  </span>
+                  <span class="file-name">{fileNameRewPeq}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- for all other soundblocks -->
         {:else}
           <div class="columns">
             {#each soundBlockItem.dom as domItem, index (index)}
@@ -272,7 +320,8 @@
                       </div>
                     {:else if domItem.element == "button"}
                       <button class="button is-danger is-multiline is-fullwidth"
-                              class:is-outlined={binding[domItem.model] == 0} on:click|preventDefault={() => bypassToggle()}>
+                              class:is-outlined={binding[domItem.model] == 0}
+                              on:click|preventDefault={() => bypassToggle()}>
                           <span class="icon is-small">
                             <i class="fas fa-volume-off"></i>
                           </span>

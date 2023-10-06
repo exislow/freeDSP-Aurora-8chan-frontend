@@ -8,11 +8,12 @@
 
   export let presetIdSelected;
   export let presets;
-  let files;
+  let filesPreset;
   // TODO: Refactor all occurences of preset text in code to a helper function somehow.
   let presetNameSelected = presets[presetIdSelected] || 'Preset ' + presetIdSelected;
 
   // TODO: Preset import not tested, yet.
+  // TODO: Add "ARE YOU SURE?" dialogue.
   async function presetImport(presetFile) {
     $apiLoading = true;
     const response = await presetFilePost(presetIdSelected, presetFile);
@@ -27,6 +28,18 @@
 
     $apiLoading = false;
   }
+
+  // Import REW PEQ
+  let filesRewPeq = null;
+  let fileNameRewPeq = "No file selected.";
+  $: if (filesRewPeq) {
+    fileNameRewPeq = filesRewPeq[0].name;
+  }
+
+  async function importRewPeq() {
+
+  }
+
 </script>
 
 
@@ -39,15 +52,15 @@
   <div class="column">
     <div class="file is-info has-name has-addons is-fullwidth">
       <label class="file-label">
-        <input class="file-input" type="file" name="resume" bind:files>
+        <input class="file-input" type="file" name="resume" bind:files={filesPreset}>
         <span class="file-cta">
           <span class="file-label">
             Choose a file…
           </span>
         </span>
         <span class="file-name">
-          {#if files && files[0]}
-            {files[0].name}
+          {#if filesPreset && filesPreset[0]}
+            {filesPreset[0].name}
           {:else}
             No file selected.
           {/if}
@@ -56,11 +69,36 @@
     </div>
   </div>
   <div class="column">
-    <button class="button is-warning is-fullwidth" on:click={() => presetImport(files[0].name)}>Import Preset for&nbsp;<strong>{presetNameSelected}</strong></button>
+    <button class="button is-warning is-fullwidth" on:click={() => presetImport(filesPreset[0].name)}  disabled="{filesPreset ? false : true }">Import Preset for&nbsp;<strong>{presetNameSelected}</strong></button>
   </div>
 </div>
 <div class="columns">
   <div class="column">
     <a class="button is-success is-fullwidth" href="/preset.param" target="_blank" rel="external">Download&nbsp;<strong>{presetNameSelected}</strong>&nbsp;Preset</a>
+  </div>
+</div>
+<!-- Import PEQ preset -->
+<div class="columns">
+  <div class="column">
+    <h2>Import PEQ Preset</h2>
+    <p>You can import your text exported REW PEQ preset here to apply it to every available channel.<span class="is-italic">Note: Be careful. This overwrites all your existing PEQ settings.</span></p>
+  </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <div class="file is-info has-name has-addons is-fullwidth">
+      <label class="file-label">
+        <input class="file-input" type="file" name="filesRewPeq" bind:files={filesRewPeq}>
+        <span class="file-cta">
+          <span class="file-label">
+            Choose a file…
+          </span>
+        </span>
+        <span class="file-name">{fileNameRewPeq}</span>
+      </label>
+    </div>
+  </div>
+  <div class="column">
+    <button class="button is-warning is-fullwidth" on:click={() => importRewPeq(filesRewPeq[0])} disabled="{filesRewPeq ? false : true }">Import REW PEQs</button>
   </div>
 </div>
