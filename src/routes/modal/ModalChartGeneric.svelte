@@ -18,7 +18,7 @@
   import { configSite, filterFunctions, soundProcessor } from "../helper/constants.js";
   import { apiLoading } from "../helper/store.js";
   import { createEventDispatcher, onMount } from "svelte";
-  import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
+  import { toastErrorHttp, toastSuccess, toastWarning } from "../helper/toast.js";
   import { rewPeqParse } from "../helper/filterAudio.js";
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, LogarithmicScale, Filler, canvasBgColor, cursorVerticalLine);
@@ -204,15 +204,25 @@
   }
   export async function rewPeqUpload(fileRewPeq) {
     let text = await fileRewPeq.text();
-    let filter = rewPeqParse(text, fileNameRewPeq);
+    let filter = rewPeqParse(text);
+    let isPeqImported = false;
 
-    (await filter).forEach((item, index) => {
+    filter.forEach((item, index) => {
       if (item) {
         binding.fcHz[index] = item.fcHz;
         binding.gainDb[index] = item.gainDb;
         binding.q[index] = item.q;
+        binding.isBypass[index] = item.isBypass;
       }
     });
+
+    if (isPeqImported == true) {
+      toastSuccess("All PEQs have been imported. Please press <strong>Save</strong>.");
+    } else {
+      toastWarning(
+        `<strong>${fileNameRewPeq}</strong> doesn't look like a valid REW PEQ text export file.`
+      );
+    }
   }
 
 </script>

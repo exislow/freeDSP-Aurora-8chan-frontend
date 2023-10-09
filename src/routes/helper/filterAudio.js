@@ -1,12 +1,10 @@
-// Parse REW PEQ file
-// TODO: PEQ Handle ON /OFF using BYPASS.
-// TODO: Cut peqs array after max PEQ slots
-import { toastSuccess, toastWarning } from "./toast.js";
+import { soundProcessor } from "./constants.js";
 
-export async function rewPeqParse(content, filename) {
+// Parse REW PEQ file
+// TODO: PEQ Handle ON/OFF using BYPASS.
+export function rewPeqParse(content, arrayAdjust = true) {
   const regex = /Filter\s+(\d+):\sON\s+PK\s+Fc\s+(.*)\sHz\s+Gain\s+(.*)\sdB\s+Q\s+(.*)/gm;
   let m = null;
-  let isPeqImported = false;
   let result = [];
 
   while ((m = regex.exec(content)) !== null) {
@@ -19,18 +17,13 @@ export async function rewPeqParse(content, filename) {
     result[idx] = {
       fcHz: m[2],
       gainDb: m[3],
-      q: m[4]
+      q: m[4],
+      isBypass: "0"
     };
-
-    isPeqImported = true;
   }
 
-  if (isPeqImported == true) {
-    toastSuccess("All PEQs have been imported. Please press <strong>Save</strong>.");
-  } else {
-    toastWarning(
-      `<strong>${filename}</strong> doesn't look like a valid REW PEQ text export file.`
-    );
+  if (arrayAdjust) {
+    result = result.slice(0, soundProcessor.soundBlocks.peqbank.bandsCount);
   }
 
   return result;

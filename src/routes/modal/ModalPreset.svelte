@@ -4,7 +4,9 @@
     presetSwitchPost
   } from "../helper/api.js";
   import { apiLoading } from "../helper/store.js";
-  import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
+  import { toastErrorHttp, toastSuccess, toastWarning } from "../helper/toast.js";
+  import { rewPeqParse } from "../helper/filterAudio.js";
+  import { configSite, soundProcessor } from "../helper/constants.js";
 
   export let presetIdSelected;
   export let presets;
@@ -36,8 +38,47 @@
     fileNameRewPeq = filesRewPeq[0].name;
   }
 
-  async function importRewPeq() {
+  async function importRewPeq(fileRewPeq) {
+    $apiLoading = true;
+    let text = await fileRewPeq.text();
+    let filter = rewPeqParse(text);
+    let isPeqImported = false;
+    const arrApiSoundBlockData = [];
 
+    for (let i = 0; i <= soundProcessor.soundBlocks.peqbank.bandsCount; i++) {
+      const apiSoundBlockData = await soundProcessor.soundBlocks.peqbank.api.get(i);
+
+      filter.forEach((item, index) => {
+        if (item) {
+          for (const [key, value] of Object.entries(apiSoundBlockData)) {
+            apiSoundBlockData[key][index] = item[configSite.api.mapping.externalToInternal[key]];
+          }
+
+          isPeqImported = true;
+        }
+      });
+
+      apiSoundBlockData["idx"] = i;
+      arrApiSoundBlockData.push(apiSoundBlockData);
+    }
+
+    if (isPeqImported == true) {
+
+      for (let j = 0; j <= soundProcessor.countChannel; j++) {
+        const apiSoundBlockData = arrApiSoundBlockData[j];
+        apiSoundBlockData["idx"] = j;
+        apiSoundBlockData["numbands"] = soundProcessor.soundBlocks.peqbank.bandsCount;
+        const response = await soundProcessor.soundBlocks.peqbank.api.post(j, apiSoundBlockData);
+      }
+
+      toastSuccess("All PEQs have been imported for every channel.");
+    } else {
+      toastWarning(
+        `<strong>${fileNameRewPeq}</strong> doesn't look like a valid REW PEQ text export file.`
+      );
+    }
+
+    $apiLoading = false;
   }
 
 </script>
@@ -88,7 +129,7 @@
   <div class="column">
     <div class="file is-info has-name has-addons is-fullwidth">
       <label class="file-label">
-        <input class="file-input" type="file" name="filesRewPeq" bind:files={filesRewPeq}>
+        <input class="file-input" type="file" name="filesRewPeq" bind:files={filesRewPeq} accept="text/plain">
         <span class="file-cta">
           <span class="file-label">
             Choose a file…
