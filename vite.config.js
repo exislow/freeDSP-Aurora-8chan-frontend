@@ -1,9 +1,16 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import htmlPurge from "vite-plugin-purgecss";
+import { viteSingleFile } from "vite-plugin-singlefile";
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit(), htmlPurge([htmlPurge()])],
+  plugins: [
+    sveltekit(),
+    htmlPurge(),
+    viteSingleFile({
+      removeViteModuleLoader: true
+    })
+  ],
   css: {
     preprocessorOptions: {
       scss: {
@@ -12,7 +19,7 @@ const config = {
     }
   },
   build: {
-    minify: "terser"
+    minify: false
   }
 };
 

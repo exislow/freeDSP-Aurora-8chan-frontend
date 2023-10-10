@@ -36,7 +36,8 @@
     "terser": "^5.15.1",
     "typescript": "^4.7.4",
     "vite": "^4.4.11",
-    "vite-plugin-purgecss": "^0.2.12"
+    "vite-plugin-purgecss": "^0.2.12",
+    "vite-plugin-singlefile": "^0.13.5"
   },
   "type": "module"
 }
