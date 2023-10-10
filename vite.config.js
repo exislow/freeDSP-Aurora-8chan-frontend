@@ -1,9 +1,12 @@
-import { sveltekit } from "@sveltejs/kit/vite";
-import htmlPurge from "vite-plugin-purgecss";
+import { defineConfig } from "vite";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 
-/** @type {import('vite').UserConfig} */
-const config = {
-  plugins: [sveltekit(), htmlPurge([htmlPurge()])],
+export default defineConfig({
+  plugins: [
+    svelte({
+      emitCss: false
+    })
+  ],
   css: {
     preprocessorOptions: {
       scss: {
@@ -12,13 +15,13 @@ const config = {
     }
   },
   build: {
-    minify: "terser"
+    assetsDir: "",
+    sourcemap: true,
+    lib: {
+      entry: "src/app.html",
+      formats: ["iife"],
+      name: "SvelteMicroFrontend",
+      fileName: "svelte-micro-frontend"
+    }
   }
-};
-
-// Try to install
-// https://github.com/vbenjs/vite-plugin-html / https://vuejsexamples.com/a-vite-plugin-for-index-html-that-provides-minify-and-ejs-template-based-functionality/
-// https://github.com/richardtallent/vite-plugin-singlefile
-// https://www.npmjs.com/package/html-minifier-terser
-
-export default config;
+});
