@@ -8,17 +8,22 @@ const config = {
   },
   kit: {
     adapter: adapter({
-      fallback: "index.html"
+      pages: "dist",
+      assets: "dist",
+      fallback: "bundle.html",
+      precompress: false,
+      strict: true
     })
     //prerender: { entries: ['/'] }
   },
+  appDir: "build",
   trailingSlash: "always",
-
   preprocess: [
     preprocess({
       scss: {
         prependData: '@use "src/variables.scss" as *;'
-      }
+      },
+      postcss: false
     })
   ]
 };
