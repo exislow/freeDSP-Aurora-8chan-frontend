@@ -1,5 +1,5 @@
 <script>
-  import "../app.scss";
+  import "./app.scss";
   import Header from "./component/Header.svelte";
   import Footer from "./component/Footer.svelte";
   import OverlayLoading from "./component/OverlayLoading.svelte";
@@ -7,16 +7,28 @@
   import ModalFactory from "./modal/ModalFactory.svelte";
   import Page from "./Page.svelte";
   import { SvelteToast } from '@zerodevx/svelte-toast'
-  import { fcAllGet } from "./helper/api.js";
+  import {
+    audioInputGet,
+    bypassAllGet, channelNamesGet,
+    configAddonGet,
+    configDeviceGet, configWifiGet,
+    fcAllGet,
+    spdifOutGet,
+    volumeMasterGet
+  } from "./helper/api.js";
+  import { onMount } from "svelte";
 
-  $apiLoading = true;
-  /** @type {import('./$types').LayoutData} */
   export let data;
 
-  if (typeof data == "object") {
-    $apiLoading = false;
-    $presetActive = data.configDevice.pre;
-  }
+  onMount(async () => {
+    $apiLoading = true;
+    data = await load({ fetch });
+
+    if (typeof data == "object") {
+      $apiLoading = false;
+      $presetActive = data.configDevice.pre;
+    }
+  })
 
   const toastOptions = {
     duration: 4000,       // duration of progress bar tween to the `next` value
@@ -32,14 +44,31 @@
 
     return true
   }
+
+  export async function load({ fetch }) {
+    return {
+      configDevice: await configDeviceGet(fetch),
+      addonInput: await configAddonGet(fetch),
+      spdifOut: await spdifOutGet(fetch),
+      audioInput: await audioInputGet(fetch),
+      bypassAll: await bypassAllGet(fetch),
+      fcAll: await fcAllGet(fetch),
+      volumeMaster: await volumeMasterGet(fetch),
+      channelNames: await channelNamesGet(fetch),
+      configWifi: await configWifiGet(fetch)
+    };
+  }
 </script>
 
 <div class="container">
   <Header />
-  {#await data}
+  {#if $apiLoading}
+    <OverlayLoading />
+  {/if}
+  {#if data === undefined}
     <!-- promise is pending -->
     <p>Waiting for the data to load...</p>
-  {:then value}
+  {:else}
     <!-- promise was fulfilled -->
     <Page bind:data={data} />
 
@@ -47,17 +76,7 @@
     {#if $modalActive }
       <ModalFactory bind:modalActive={$modalActive} bind:data={data} on:reloadFcAll={fcAllReload} />
     {/if}
-    {#if $apiLoading}
-      <OverlayLoading />
-    {/if}
-  {:catch error}
-    <!-- promise was rejected -->
-    <p>Something went wrong: {error.message}</p>
-  {/await}
+  {/if}
   <slot />
   <SvelteToast options="{toastOptions}" />
 </div>
-
-<style>
-
-</style>

@@ -9,12 +9,12 @@
 @import "bulma/sass/layout/_all";
 
 // Extensions
-@import "src/bulma-pageloader";
+@import "src/css/bulma-pageloader";
 
 // Fonts
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import "@fortawesome/fontawesome-free/scss/solid";
 
 // Variable overrides
-@import "_override";
+@import "css/_override";
 

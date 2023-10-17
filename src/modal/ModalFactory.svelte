@@ -34,7 +34,7 @@
 <svelte:window on:keydown={(event) => handleKeydown(thisModal, event)} />
 
 <div aria-modal="true" bind:this={thisModal} class="modal is-active" id="{modalObj.id}">
-  <div class="modal-background" on:click={modalClose} />
+  <div class="modal-background" on:click={modalClose} role="button" tabindex="-999" />
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title">

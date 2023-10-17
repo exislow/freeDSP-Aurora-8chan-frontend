@@ -2,12 +2,18 @@ import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import htmlPurge from "vite-plugin-purgecss";
 // https://sean.eulenberg.de/posts/single-file-applications-with-svelte/
-//import UnoCSS from 'unocss/vite';
-//import { viteSingleFile } from 'vite-plugin-singlefile';
+import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [svelte(), htmlPurge()],
+export default defineConfig(({ command }) => ({
+  plugins: [
+    svelte(),
+    htmlPurge(),
+    command === "build" &&
+      viteSingleFile({
+        removeViteModuleLoader: true
+      })
+  ],
   css: {
     preprocessorOptions: {
       scss: {
@@ -18,7 +24,7 @@ export default defineConfig({
   build: {
     minify: "terser"
   }
-});
+}));
 
 // Try to install
 // https://github.com/vbenjs/vite-plugin-html / https://vuejsexamples.com/a-vite-plugin-for-index-html-that-provides-minify-and-ejs-template-based-functionality/

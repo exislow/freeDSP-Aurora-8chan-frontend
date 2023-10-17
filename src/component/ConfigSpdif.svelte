@@ -73,10 +73,10 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label class="label">Input</label>
+            <label class="label" for="spdif-input">Input</label>
             <div class="control">
               <div class="select is-fullwidth">
-                <select bind:value={stateSpdif.input.selected} on:change={updateConfigAddon}>
+                <select id="spdif-input" bind:value={stateSpdif.input.selected} on:change={updateConfigAddon}>
                   {#each Object.entries(configSpdifInput) as [id, name] (id)}
                     <option value="{id}">{name}</option>
                   {/each}
@@ -89,10 +89,10 @@
         {#each Object.entries(outputChannel) as [idChannel, valueChannel] (idChannel)}
           <div class="column">
             <div class="field">
-              <label class="label">Output {valueChannel.name}</label>
+              <label class="label" for="spdif-channel-{valueChannel.id}">Output {valueChannel.name}</label>
               <div class="control">
                 <div class="select is-fullwidth">
-                  <select bind:value={ valueChannel.selected } id="{valueChannel.id}" on:change={updateSpdifOut}>
+                  <select bind:value={ valueChannel.selected } id="spdif-channel-{valueChannel.id}" on:change={updateSpdifOut}>
                     {#each Object.entries(output) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}

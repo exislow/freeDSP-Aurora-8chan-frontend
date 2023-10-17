@@ -312,11 +312,11 @@
             {#each soundBlockItem.dom as domItem, index (index)}
               <div class="column">
                 <div class="field is-small">
-                  <label class="label">{domItem.label}</label>
+                  <label class="label" for="soundblock-{domItem.label}">{domItem.label}</label>
                   <div class="control has-icons-right">
                     {#if domItem.element == "input"}
                       {#if domItem.type == "number"}
-                        <input class="input" placeholder="{domItem.label}" type="number"
+                        <input class="input" id="soundblock-{domItem.label}" placeholder="{domItem.label}" type="number"
                                bind:value={binding[domItem.model]}>
                       {/if}
                       <span class="icon is-small is-right">{domItem.unit}</span>

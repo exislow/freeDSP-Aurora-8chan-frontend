@@ -108,11 +108,11 @@
           {#each Object.entries(hardware.value) as [idValue, itemsValue] (idValue)}
             <div class="column">
               <div class="field is-small">
-                <label class="label">{itemsValue.name}</label>
+                <label class="label" for="hardware-{itemsValue.name}">{itemsValue.name}</label>
 
                 <div class="control">
                   <div class="select is-normal is-fullwidth">
-                    <select bind:value={ stateDevice[idValue] } id="{idValue}">
+                    <select bind:value={ stateDevice[idValue] } id="hardware-{idValue}">
                       {#each Object.entries(itemsValue.value) as [id, value] (id)}
                         <option value={id}>{value}</option>
                       {/each}
@@ -147,10 +147,10 @@
           {#each itemWifi.form as itemsValue, index (itemsValue)}
             <div class="column">
               <div class="field is-small">
-                <label class="label">{itemsValue.name}</label>
+                <label class="label" for="wifi-{itemsValue.name}">{itemsValue.name}</label>
 
                 <div class="control">
-                  <input class="input" type="text" placeholder="{itemsValue.name}" bind:value={itemsValue.value}>
+                  <input class="input" id="wifi-{itemsValue.name}" type="text" placeholder="{itemsValue.name}" bind:value={itemsValue.value}>
                 </div>
               </div>
             </div>

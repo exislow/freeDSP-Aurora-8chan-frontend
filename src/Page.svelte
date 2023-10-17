@@ -137,10 +137,10 @@
         <div class="columns is-variable is-1 mb-0 is-vcentered">
           <div class="column is-fullwidth">
             <div class="field">
-              <label class="label label-narrow">{data.channelNames.inputs[num]}</label>
+              <label class="label label-narrow" for="channel-source-{num}">{data.channelNames.inputs[num]}</label>
               <div class="control">
                 <div class="select">
-                  <select bind:value={ state.input[num] }>
+                  <select bind:value={ state.input[num] } id="channel-source-{num}">
                     {#each Object.entries(configChannelSource) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}
@@ -191,7 +191,7 @@
       <!-- Volume control -->
       <div class="columns is-centered is-vcentered">
         <div class="column is-1 has-text-right">
-          <label class="label">Volume</label>
+          <label class="label" for="db-volume">Volume</label>
         </div>
 
         <div class="column is-half is-vcentered pos-slider">
@@ -200,7 +200,7 @@
 
         <div class="column is-2">
           <div class="control has-icons-right">
-            <input class="input" type="number" max="{configSite.volume.max}" min="{configSite.volume.min}" step="{configSite.volume.step}" bind:value={state.volumeMaster} on:change={updateVolumeMaster}>
+            <input class="input" id="db-volume" type="number" max="{configSite.volume.max}" min="{configSite.volume.min}" step="{configSite.volume.step}" bind:value={state.volumeMaster} on:change={updateVolumeMaster}>
             <span class="icon is-small is-right">
               dB
             </span>
