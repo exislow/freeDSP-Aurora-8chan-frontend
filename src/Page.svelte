@@ -79,6 +79,8 @@
     data.fcAll = await fcAllGet(fetch);
     data.volumeMaster = await volumeMasterGet(fetch);
 
+    state.volumeMaster = data.volumeMaster.vol;
+
     return true
   }
 
