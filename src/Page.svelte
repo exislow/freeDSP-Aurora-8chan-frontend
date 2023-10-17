@@ -122,6 +122,19 @@
       toastErrorHttp(response);
     }
   }
+
+  async function presetStore() {
+    $apiLoading = true;
+    const response = await presetStorePost();
+
+    if (response.ok) {
+      toastSuccess("Preset has been stored!");
+    } else {
+      toastErrorHttp(response);
+    }
+
+    $apiLoading = false;
+  }
   </script>
 
 <svelte:head>
@@ -215,7 +228,7 @@
         {@const isActive = $presetActive == id ? true : false}
         <button class="button is-info card-footer-item has-text-weight-bold" class:is-active={isActive} on:click={() => presetSwitch(id)}>{data.channelNames.presets[id] || name}</button>
       {/each}
-      <button class="button is-success card-footer-item has-text-weight-bold" on:click={() => presetStorePost()}>Save</button>
+      <button class="button is-success card-footer-item has-text-weight-bold" on:click={() => presetStore() }>Save</button>
     </footer>
   </div>
 </div>

@@ -51,7 +51,7 @@
   onMount(async () => {
     apiSoundBlockData = await soundBlockItem.api.get(filter.channelNumber);
     binding.fcHz = apiSoundBlockData.fc ? apiSoundBlockData.fc : false;
-    binding.filterId = apiSoundBlockData.typ ? apiSoundBlockData.typ.toString() : false;
+    binding.filterId = apiSoundBlockData.typ !== undefined ? apiSoundBlockData.typ.toString() : false;
     binding.slope = apiSoundBlockData.slope ? apiSoundBlockData.slope : false;
     binding.gainDb = apiSoundBlockData.gain ? apiSoundBlockData.gain : false;
     if (!binding.gainDb) {

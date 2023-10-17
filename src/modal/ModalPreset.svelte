@@ -18,7 +18,7 @@
   // TODO: Add "ARE YOU SURE?" dialogue.
   async function presetImport(presetFile) {
     $apiLoading = true;
-    const response = await presetFilePost(presetIdSelected, presetFile);
+    const response = await presetFilePost(presetIdSelected + 1, presetFile);
 
     if (response.ok) {
       const presetSwitchState = await presetSwitchPost(presetIdSelected);
@@ -110,7 +110,7 @@
     </div>
   </div>
   <div class="column">
-    <button class="button is-warning is-fullwidth" on:click={() => presetImport(filesPreset[0].name)}  disabled="{filesPreset ? false : true }">Import Preset for&nbsp;<strong>{presetNameSelected}</strong></button>
+    <button class="button is-warning is-fullwidth" on:click={() => presetImport(filesPreset[0])}  disabled="{filesPreset ? false : true }">Import Preset for&nbsp;<strong>{presetNameSelected}</strong></button>
   </div>
 </div>
 <div class="columns">
