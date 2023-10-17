@@ -8,7 +8,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     svelte(),
     htmlPurge(),
-    command === "build" &&
+    command === "build1" &&
       viteSingleFile({
         removeViteModuleLoader: true
       })

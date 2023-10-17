@@ -9,7 +9,7 @@
     audioInputGet,
     bypassAllGet,
     configDeviceGet, fcAllGet,
-    presetSwitchPost,
+    presetSwitchPost, presetStorePost,
     spdifOutGet, volumeMasterGet, volumeMasterPost
   } from "./helper/api.js";
   import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
@@ -215,7 +215,7 @@
         {@const isActive = $presetActive == id ? true : false}
         <button class="button is-info card-footer-item has-text-weight-bold" class:is-active={isActive} on:click={() => presetSwitch(id)}>{data.channelNames.presets[id] || name}</button>
       {/each}
-      <button class="button is-success card-footer-item has-text-weight-bold">Save</button>
+      <button class="button is-success card-footer-item has-text-weight-bold" on:click={() => presetStorePost()}>Save</button>
     </footer>
   </div>
 </div>

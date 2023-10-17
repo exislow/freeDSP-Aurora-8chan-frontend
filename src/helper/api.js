@@ -30,10 +30,10 @@ export async function apiPost(endpoint, data, fetchFn = fetch) {
   return response;
 }
 
-export async function apiPostFile(endpoint, file, fetchFn = fetch) {
+export async function apiPostFile(endpoint, file, headers = {}, fetchFn = fetch) {
   const options = {
     method: "POST",
-    headers: {},
+    headers,
     body: file
   };
   console.log("API post file req", file);
@@ -224,6 +224,12 @@ export async function volumeMasterPost(volumeDb) {
 
 export async function presetFilePost(index, file) {
   const response = await apiPostFile(configSite.api.endpoint.upload + "usrparam.00" + index, file);
+
+  return response;
+}
+
+export async function presetStorePost() {
+  const response = await apiPost(configSite.api.endpoint.store, {});
 
   return response;
 }

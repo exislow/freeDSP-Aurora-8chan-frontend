@@ -100,7 +100,8 @@ export const configSite = {
       wifiAp: "pwdap",
       wifiConnect: "wifi",
       presetSwitch: "preset",
-      upload: "upload?fname="
+      upload: "upload?fname=",
+      store: "store"
     },
     mapping: {
       externalToInternal: {

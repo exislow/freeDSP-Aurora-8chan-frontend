@@ -22,6 +22,7 @@
             <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.configDevice.id}" on:click={(event) => modalOpen(event.target.dataset.target)}>Device</button>
             <button class="button has-text-weight-bold js-modal-trigger" data-target="{modal.preset.id}" on:click={(event) => modalOpen(event.target.dataset.target)}>Preset</button>
             <a href="/chnames.html" class="button navbar-item has-text-weight-bold" rel="external">Names</a>
+            <a href="/fallback" class="button navbar-item has-text-weight-bold" rel="external">Upload Plugin</a>
           </div>
         </div>
       </div>
