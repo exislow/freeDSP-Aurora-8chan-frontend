@@ -77,8 +77,8 @@ export const configAudioFilter = {
 
 export const configSite = {
   api: {
-    //url: import.meta.env.DEV ? "http://localhost:3000" : "",
-    url: "http://localhost:3000",
+    url: import.meta.env.DEV ? "http://localhost:3000" : "",
+    //url: "http://localhost:3000",
     endpoint: {
       configDevice: "config",
       configAddon: "addoncfg",

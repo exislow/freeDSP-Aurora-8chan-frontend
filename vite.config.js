@@ -21,7 +21,8 @@ export default defineConfig(({ command }) => ({
     }
   },
   build: {
-    minify: "terser"
+    minify: "terser",
+    cssMinify: "esbuild"
   }
 }));
 
