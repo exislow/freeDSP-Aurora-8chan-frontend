@@ -13,6 +13,8 @@
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",
+        "@iconify/icons-fad": "^1.2.4",
+        "@iconify/svelte": "^3.1.4",
         "@sveltejs/vite-plugin-svelte": "^2.4.6",
         "@zerodevx/svelte-toast": "^0.8.2",
         "bulma": "^0.9.4",

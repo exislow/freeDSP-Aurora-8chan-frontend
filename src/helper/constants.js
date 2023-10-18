@@ -16,6 +16,14 @@ import {
   gainPost,
   peqBankPost
 } from "./api.js";
+import filterLowpass from "@iconify/icons-fad/filter-lowpass";
+import filterHighpass from "@iconify/icons-fad/filter-highpass";
+import metronomeIcon from "@iconify/icons-fad/metronome";
+import sliderRound1 from "@iconify/icons-fad/slider-round-1";
+import filterShelvingHi from "@iconify/icons-fad/filter-shelving-hi";
+import filterShelvingLo from "@iconify/icons-fad/filter-shelving-lo";
+import filterNotch from "@iconify/icons-fad/filter-notch";
+import phaseIcon from "@iconify/icons-fad/phase";
 
 export const configAudioFilter = {
   0: {
@@ -195,6 +203,7 @@ export const soundProcessor = {
         long: "High Pass"
       },
       color: "is-info",
+      iconFontFad: filterHighpass,
       fnName: filterFunctions.hp,
       idPrefix: "hp",
       api: {
@@ -231,6 +240,7 @@ export const soundProcessor = {
         long: "Low Shelf"
       },
       color: "is-link",
+      iconFontFad: filterShelvingLo,
       fnName: filterFunctions.lshelv,
       idPrefix: "ls",
       api: {
@@ -280,6 +290,7 @@ export const soundProcessor = {
         long: "Parametric Equalizers"
       },
       color: "is-primary",
+      iconFontFad: filterNotch,
       fnName: filterFunctions.peqbank,
       idPrefix: "peqbank",
       api: {
@@ -331,6 +342,7 @@ export const soundProcessor = {
         long: "High Shelf"
       },
       color: "is-link",
+      iconFontFad: filterShelvingHi,
       fnName: filterFunctions.hshelv,
       idPrefix: "hs",
       api: {
@@ -381,6 +393,7 @@ export const soundProcessor = {
         long: "Low Pass"
       },
       color: "is-info",
+      iconFontFad: filterLowpass,
       fnName: filterFunctions.lp,
       idPrefix: "lp",
       api: {
@@ -417,6 +430,7 @@ export const soundProcessor = {
         long: "Phase"
       },
       color: "is-warning",
+      iconFontFad: phaseIcon,
       fnName: filterFunctions.phase,
       idPrefix: "ph",
       api: {
@@ -464,6 +478,7 @@ export const soundProcessor = {
         long: "Delay"
       },
       color: "is-success",
+      iconFontFad: metronomeIcon,
       fnName: filterFunctions.delay,
       idPrefix: "dly",
       api: {
@@ -494,6 +509,7 @@ export const soundProcessor = {
         long: "Gain"
       },
       color: "is-primary",
+      iconFontFad: sliderRound1,
       fnName: filterFunctions.gain,
       idPrefix: "gn",
       api: {

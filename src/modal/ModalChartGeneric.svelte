@@ -50,17 +50,17 @@
   // Receive data from API and map the value to internal binding.
   onMount(async () => {
     apiSoundBlockData = await soundBlockItem.api.get(filter.channelNumber);
-    binding.fcHz = apiSoundBlockData.fc ? apiSoundBlockData.fc : false;
+    binding.fcHz = apiSoundBlockData.fc !== undefined ? apiSoundBlockData.fc : false;
     binding.filterId = apiSoundBlockData.typ !== undefined ? apiSoundBlockData.typ.toString() : false;
-    binding.slope = apiSoundBlockData.slope ? apiSoundBlockData.slope : false;
-    binding.gainDb = apiSoundBlockData.gain ? apiSoundBlockData.gain : false;
-    if (!binding.gainDb) {
-      binding.gainDb = apiSoundBlockData.V0 ? apiSoundBlockData.V0 : false;
+    binding.slope = apiSoundBlockData.slope !== undefined ? apiSoundBlockData.slope : false;
+    binding.gainDb = apiSoundBlockData.gain !== undefined ? apiSoundBlockData.gain : false;
+    if (!binding.gainDb === false) {
+      binding.gainDb = apiSoundBlockData.V0 !== undefined ? apiSoundBlockData.V0 : false;
     }
-    binding.isBypass = apiSoundBlockData["bypass"] ? apiSoundBlockData["bypass"] : apiSoundBlockData.mute;
-    binding.q = apiSoundBlockData.Q ? apiSoundBlockData.Q : false;
-    binding.invert = apiSoundBlockData.inv ? apiSoundBlockData.inv : false;
-    binding.delayMs = apiSoundBlockData.dly ? apiSoundBlockData.dly : false;
+    binding.isBypass = apiSoundBlockData["bypass"] !== undefined ? apiSoundBlockData["bypass"] : apiSoundBlockData.mute;
+    binding.q = apiSoundBlockData.Q !== undefined ? apiSoundBlockData.Q : false;
+    binding.invert = apiSoundBlockData.inv !== undefined ? apiSoundBlockData.inv : false;
+    binding.delayMs = apiSoundBlockData.dly !== undefined ? apiSoundBlockData.dly : false;
 
     $apiLoading = false;
   });

@@ -13,6 +13,7 @@
     spdifOutGet, volumeMasterGet, volumeMasterPost, spdifOutPost, audioInputSet
   } from "./helper/api.js";
   import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
+  import Icon from '@iconify/svelte';
 
   export let data;
   let thisMuteButton = {};
@@ -187,7 +188,7 @@
                   data-target="{modal.chartGeneric.id}"
                   on:click={() => activateModalChart(modal.chartGeneric.id, name, num, data.channelNames.inputs[num])}>
                   <span>
-                    <span class="has-text-weight-bold">{definition.name.short}</span><br />
+                    <Icon icon={definition.iconFontFad} /> <span class="has-text-weight-bold">{definition.name.short}<br />
                     <span class="is-size-7 is-family-code">{extractFc(definition.idPrefix + num, data.fcAll.fc)}</span>
                   </span>
                 </button>
