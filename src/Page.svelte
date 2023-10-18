@@ -20,18 +20,22 @@
   let volumeMaster = data.volumeMaster.vol;
 
   const state = {
-    volumeMaster: volumeMaster,
-    input: {
-      0: data.audioInput.in0,
-      1: data.audioInput.in1,
-      2: data.audioInput.in2,
-      3: data.audioInput.in3,
-      4: data.audioInput.in4,
-      5: data.audioInput.in5,
-      6: data.audioInput.in6,
-      7: data.audioInput.in7
-    }
+    input: {}
   };
+
+  function stateSet(volumeMaster, audioInput) {
+    state.volumeMaster = volumeMaster;
+    state.input["0"] = audioInput.in0;
+    state.input["1"] = audioInput.in1;
+    state.input["2"] = audioInput.in2;
+    state.input["3"] = audioInput.in3;
+    state.input["4"] = audioInput.in4;
+    state.input["5"] = audioInput.in5;
+    state.input["6"] = audioInput.in6;
+    state.input["7"] = audioInput.in7;
+  }
+
+  $: stateSet(volumeMaster, data.audioInput);
 
   function activateModalChart(target, filterId, channelNumber, channelName) {
     $filterActive.id = filterId;
