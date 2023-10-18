@@ -152,6 +152,12 @@
       apiSoundBlockData = settingsSound;
     }
 
+    // Ugly workaround due to inconsistent shitty aurora API.
+    if (apiSoundBlockData.dly !== undefined) {
+      apiSoundBlockData.delay = apiSoundBlockData.dly;
+      delete apiSoundBlockData.dly;
+    }
+
     apiSoundBlockData.idx = filter.channelNumber;
     const response = await soundBlockItem.api.post(filter.channelNumber, apiSoundBlockData);
     $apiLoading = false;
