@@ -35,7 +35,7 @@
     state.input["7"] = audioInput.in7;
   }
 
-  $: stateSet(volumeMaster, data.audioInput);
+  $: stateSet(data.volumeMaster.vol, data.audioInput);
 
   function activateModalChart(target, filterId, channelNumber, channelName) {
     $filterActive.id = filterId;
