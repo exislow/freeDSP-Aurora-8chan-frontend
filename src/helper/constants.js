@@ -213,7 +213,10 @@ export const soundProcessor = {
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "button",
@@ -240,21 +243,29 @@ export const soundProcessor = {
           type: "number",
           label: "Gain",
           unit: "dB",
-          model: "gainDb"
+          model: "gainDb",
+          min: -24,
+          max: 24
         },
         {
           element: "input",
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Slope",
           unit: "S",
-          model: "slope"
+          model: "slope",
+          min: 0.1,
+          max: 2,
+          step: 0.01
         },
         {
           element: "button",
@@ -281,21 +292,30 @@ export const soundProcessor = {
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Gain (V0)",
           unit: "dB",
-          model: "gainDb"
+          model: "gainDb",
+          min: -100,
+          max: 100,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Bandwidth",
           unit: "Q",
-          model: "q"
+          model: "q",
+          min: 0.1,
+          max: 100,
+          step: "any"
         },
         {
           element: "button",
@@ -323,21 +343,30 @@ export const soundProcessor = {
           type: "number",
           label: "Gain",
           unit: "dB",
-          model: "gainDb"
+          model: "gainDb",
+          min: -24,
+          max: 24,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Slope",
           unit: "S",
-          model: "slope"
+          model: "slope",
+          min: 0.1,
+          max: 2,
+          step: 0.01
         },
         {
           element: "button",
@@ -370,7 +399,10 @@ export const soundProcessor = {
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "button",
@@ -397,14 +429,27 @@ export const soundProcessor = {
           type: "number",
           label: "Cut-off Frequency",
           unit: "Hz",
-          model: "fcHz"
+          model: "fcHz",
+          min: 1,
+          max: 20000,
+          step: "any"
         },
         {
           element: "input",
           type: "number",
           label: "Bandwidth",
           unit: "Q",
-          model: "q"
+          model: "q",
+          min: 0.1,
+          max: 100,
+          step: "any"
+        },
+        {
+          element: "input",
+          type: "checkbox",
+          label: "Invert",
+          model: "invert",
+          unit: "Switch"
         },
         {
           element: "button",
@@ -431,7 +476,10 @@ export const soundProcessor = {
           type: "number",
           label: "Delay",
           unit: "ms",
-          model: "delayMs"
+          model: "delayMs",
+          min: 0,
+          max: 100,
+          step: "any"
         },
         {
           element: "button",
@@ -458,7 +506,10 @@ export const soundProcessor = {
           type: "number",
           label: "Gain",
           unit: "dB",
-          model: "gainDb"
+          model: "gainDb",
+          min: -120,
+          max: 0,
+          step: "any"
         },
         {
           element: "button",

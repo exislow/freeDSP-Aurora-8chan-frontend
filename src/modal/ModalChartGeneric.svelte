@@ -152,6 +152,7 @@
       apiSoundBlockData = settingsSound;
     }
 
+    apiSoundBlockData.idx = filter.channelNumber;
     const response = await soundBlockItem.api.post(filter.channelNumber, apiSoundBlockData);
     $apiLoading = false;
 
@@ -261,15 +262,16 @@
                       <div class="control has-icons-right">
                         {#if domItem.element == "input"}
                           {#if domItem.type == "number"}
-                            <input class="input" placeholder="{domItem.label}" type="number"
-                                   bind:value={binding[domItem.model][num]} tabindex="{`1${page}${num}${index}`}">
+                            <input class="input" placeholder="{domItem.min} - {domItem.max}" type="number"
+                                   bind:value={binding[domItem.model][num]} tabindex="{parseInt(`1${page}${num}${index}`)}"
+                                   min="{domItem.min}" max="{domItem.max}" step="{domItem.step}">
                           {/if}
                           <span class="icon is-small is-right">{domItem.unit}</span>
                         {:else if domItem.element == "button"}
                           <button class="button is-danger is-multiline is-fullwidth"
                                   class:is-outlined={binding[domItem.model][num] == 0}
                                   on:click|preventDefault={() => bypassToggle(num)}
-                                  tabindex="{`1${page}${num}${index}`}">
+                                  tabindex="{parseInt(`1${page}${num}${index}`)}">
                             <span class="icon is-small">
                               <i class="fas fa-volume-off"></i>
                             </span>
@@ -316,8 +318,12 @@
                   <div class="control has-icons-right">
                     {#if domItem.element == "input"}
                       {#if domItem.type == "number"}
-                        <input class="input" id="soundblock-{domItem.label}" placeholder="{domItem.label}" type="number"
-                               bind:value={binding[domItem.model]}>
+                        <input class="input" id="soundblock-{domItem.label}" placeholder="{domItem.min} - {domItem.max}"
+                               type="number" bind:value={binding[domItem.model]}
+                               min="{domItem.min}" max="{domItem.max}" step="{domItem.step}">
+                      {:else if domItem.type == "checkbox"}
+                        <input class="{domItem.type}" id="soundblock-{domItem.label}"
+                               type="checkbox" bind:checked={binding[domItem.model]}>
                       {/if}
                       <span class="icon is-small is-right">{domItem.unit}</span>
                     {:else if domItem.element == "select" }
