@@ -38,7 +38,7 @@
     $apiLoading = false;
 
     if (response.ok) {
-      toastSuccess("S/PDIF input saved.");
+      toastSuccess("S/PDIF input set. Don't forget to save it.");
       spdifInput = parseInt(stateSpdif.input.selected, 16);
     } else {
       toastErrorHttp(response);
@@ -52,7 +52,7 @@
     $apiLoading = false;
 
     if (response.ok) {
-      toastSuccess("S/PDIF output saved.");
+      toastSuccess("S/PDIF output set. Don't forget to save it.");
       spdifOut.spdifleft = outputChannel.left.selected;
       spdifOut.spdifright = outputChannel.right.selected;
     } else {
