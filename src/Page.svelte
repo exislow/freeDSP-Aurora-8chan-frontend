@@ -10,7 +10,7 @@
     bypassAllGet,
     configDeviceGet, fcAllGet,
     presetSwitchPost, presetStorePost,
-    spdifOutGet, volumeMasterGet, volumeMasterPost
+    spdifOutGet, volumeMasterGet, volumeMasterPost, spdifOutPost, audioInputSet
   } from "./helper/api.js";
   import { toastErrorHttp, toastSuccess } from "./helper/toast.js";
 
@@ -137,6 +137,18 @@
 
     $apiLoading = false;
   }
+
+  async function updateAudioInput(idChannel) {
+    $apiLoading = true;
+    const response = await audioInputSet(idChannel, state.input[idChannel]);
+    $apiLoading = false;
+
+    if (response.ok) {
+      toastSuccess("Channel source changed. Please click <strong>Save</strong> to persist changes!");
+    } else {
+      toastErrorHttp(response);
+    }
+  }
   </script>
 
 <svelte:head>
@@ -155,7 +167,7 @@
               <label class="label label-narrow" for="channel-source-{num}">{data.channelNames.inputs[num]}</label>
               <div class="control">
                 <div class="select">
-                  <select bind:value={ state.input[num] } id="channel-source-{num}">
+                  <select bind:value={ state.input[num] } id="channel-source-{num}" on:change={() => updateAudioInput(num)}>
                     {#each Object.entries(configChannelSource) as [id, name] (id)}
                       <option value="{id}">{name}</option>
                     {/each}

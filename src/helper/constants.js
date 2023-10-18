@@ -101,7 +101,8 @@ export const configSite = {
       wifiConnect: "wifi",
       presetSwitch: "preset",
       upload: "upload?fname=",
-      store: "store"
+      store: "store",
+      audioInputSet: "input"
     },
     mapping: {
       externalToInternal: {

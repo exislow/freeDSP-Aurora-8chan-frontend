@@ -233,3 +233,13 @@ export async function presetStorePost() {
 
   return response;
 }
+
+export async function audioInputSet(idChannel, channelSource) {
+  const data = {
+    idx: idChannel,
+    sel: channelSource
+  };
+  const response = await apiPost(configSite.api.endpoint.audioInputSet, data);
+
+  return response;
+}
