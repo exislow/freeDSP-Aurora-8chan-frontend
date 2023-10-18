@@ -4,33 +4,33 @@
   import { toastErrorHttp, toastSuccess } from "../helper/toast.js";
   import { configSpdifInput, outputAnalog, configChannelSource } from "../helper/constants.js";
 
-  export let spdifOut = {};
   export let spdifInput = '';
+  export let spdifOut = {};
 
   const output = { ...configChannelSource, ...outputAnalog };
-
-  const outputChannel = {
-    left: {
-      name: "Left",
-      id: "spdif-out-left",
-      selected: spdifOut.spdifleft
-    },
-    right: {
-      name: "Right",
-      id: "spdif-out-right",
-      selected: spdifOut.spdifright
-    }
-  };
-
+  const outputChannel = {}
   const stateSpdif = {};
 
-  function stateSpdifInit() {
+  function stateSpdifInputSet(spdifInput) {
     stateSpdif.input = {
       selected: `0x0${spdifInput.toString(16)}`
     };
   }
+  function stateSpdifOutSet(left, right) {
+    outputChannel.left = {
+      name: "Left",
+      id: "spdif-out-left",
+      selected: left
+    };
+    outputChannel.right = {
+      name: "Right",
+      id: "spdif-out-right",
+      selected: right
+    };
+  }
 
-  stateSpdifInit();
+  $: stateSpdifInputSet(spdifInput);
+  $: stateSpdifOutSet(spdifOut.spdifleft, spdifOut.spdifright);
 
   async function updateConfigAddon() {
     $apiLoading = true;
@@ -42,7 +42,7 @@
       spdifInput = parseInt(stateSpdif.input.selected, 16);
     } else {
       toastErrorHttp(response);
-      stateSpdifInit();
+      stateSpdifInputSet(spdifInput);
     }
   }
 
