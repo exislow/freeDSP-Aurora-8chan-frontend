@@ -54,7 +54,7 @@
     binding.filterId = apiSoundBlockData.typ !== undefined ? apiSoundBlockData.typ.toString() : false;
     binding.slope = apiSoundBlockData.slope !== undefined ? apiSoundBlockData.slope : false;
     binding.gainDb = apiSoundBlockData.gain !== undefined ? apiSoundBlockData.gain : false;
-    if (!binding.gainDb === false) {
+    if (binding.gainDb === false) {
       binding.gainDb = apiSoundBlockData.V0 !== undefined ? apiSoundBlockData.V0 : false;
     }
     binding.isBypass = apiSoundBlockData["bypass"] !== undefined ? apiSoundBlockData["bypass"] : apiSoundBlockData.mute;
