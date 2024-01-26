@@ -4,15 +4,15 @@
     "vpot": false,
     "fw": "v2.2.2",
     "plugin": "v2.2.2",
-    "ip": "192.168.1.20",
+    "ip": "192.168.1.2",
     "pre": 1,
     "addcfg": 2,
     "adcsum": 0,
     "vinputs": false
   },
   "spdifout": {
-    "spdifleft": "0x00040000",
-    "spdifright": "0x00040001"
+    "spdifleft": "0x00040001",
+    "spdifright": "0x00040000"
   },
   "allinputs": {
     "num": 8,
@@ -23,7 +23,7 @@
     "in4": "0x00040000",
     "in5": "0x00040001",
     "in6": "0x00000006",
-    "in7": "0x00000007"
+    "in7": "0x00000000"
   },
   "allbyp": {
     "byp": [
@@ -514,7 +514,7 @@
     ]
   },
   "mvol": {
-    "vol": -42
+    "vol": -50
   },
   "allnames": {
     "inputs": [
@@ -548,10 +548,10 @@
   },
   "wificonfig": {
     "apname": "AP-freeDSP-Aurora",
-    "ssid": "for_pr0n_use_only"
+    "ssid": "connect_here"
   },
   "hp": {
-    "typ": "9",
+    "typ": 0,
     "fc": 1901,
     "bypass": "1"
   },
@@ -562,29 +562,33 @@
     "bypass": "0"
   },
   "lp": {
-    "typ": 2,
-    "fc": 1000,
-    "bypass": "0"
+    "typ": "1",
+    "fc": 997,
+    "bypass": "0",
+    "idx": 0
   },
   "hshelv": {
-    "gain": 5,
+    "gain": 0,
     "fc": 10000,
     "slope": 1,
     "bypass": "1"
   },
   "phase": {
-    "Q": 1,
-    "fc": 1000,
-    "inv": "1",
-    "bypass": "1"
+    "Q": 3.1,
+    "fc": 500,
+    "bypass": "1",
+    "inv": false,
+    "idx": 0
   },
   "delay": {
-    "dly": 0,
-    "bypass": "1"
+    "dly": 80,
+    "bypass": "0",
+    "idx": 0
   },
   "gain": {
-    "gain": -4,
-    "mute": "0"
+    "gain": 0,
+    "mute": "0",
+    "idx": 2
   },
   "peqbank": {
     "fc": [
@@ -621,24 +625,29 @@
       "-1.50",
       "2.00",
       "2.50",
-      "3.00"
+      "0"
     ],
     "bypass": [
+      "0",
+      "0",
+      "0",
       "1",
-      "1",
-      "1",
-      "1",
-      "1",
-      "1",
-      "1",
-      "1",
-      "1",
-      "1"
-    ],
-    "idx": 3,
-    "numbands": 10
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ]
   },
   "addoncfg": {
-    "addcfg": 2
+    "addcfg": 5
+  },
+  "input": {
+    "idx": 7,
+    "sel": "0x00010007"
+  },
+  "preset": {
+    "pre": "0"
   }
 }

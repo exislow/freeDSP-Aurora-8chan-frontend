@@ -1,10 +1,19 @@
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import htmlPurge from "vite-plugin-purgecss";
+import { compression } from "vite-plugin-compression2";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
-  plugins: [svelte(), htmlPurge()],
+  plugins: [
+    svelte(),
+    htmlPurge(),
+    compression({
+      include: /\.(js)$/i,
+      deleteOriginalAssets: true,
+      filename: "aurora.jgz"
+    })
+  ],
   css: {
     preprocessorOptions: {
       scss: {
@@ -14,7 +23,18 @@ export default defineConfig(({ command }) => ({
   },
   build: {
     minify: "terser",
-    cssMinify: "esbuild"
+    cssMinify: "esbuild",
+    assetsDir: "",
+    assetsInlineLimit: 160000,
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith(".css")) return "dark.css";
+          return assetInfo.name;
+        },
+        entryFileNames: "aurora.js"
+      }
+    }
   }
 }));
 

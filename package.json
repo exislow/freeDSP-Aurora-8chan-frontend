@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "vite dev",
-        "build": "vite build",
+        "build": "vite build && make build-post",
         "preview": "vite preview",
         "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -12,7 +12,7 @@
         "format": "prettier --plugin-search-dir . --write ."
     },
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^6.4.2",
+        "@fortawesome/fontawesome-free": "^6.5.1",
         "@iconify/icons-fad": "^1.2.4",
         "@iconify/svelte": "^3.1.4",
         "@sveltejs/vite-plugin-svelte": "^2.4.6",
@@ -35,6 +35,7 @@
         "terser": "^5.15.1",
         "typescript": "^4.7.4",
         "vite": "^4.4.11",
+        "vite-plugin-compression2": "^0.11.0",
         "vite-plugin-purgecss": "^0.2.12"
     },
     "type": "module",

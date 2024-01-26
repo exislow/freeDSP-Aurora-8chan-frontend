@@ -1,42 +1,31 @@
-# create-svelte
+# freeDSP-Aurora-Svelte-Frontend
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is the freeDSP 8channel plugin but with an up to date Web UI -- just awesome!
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Install
+
+tbd...
+
+
+## Develop
+
+## Setup
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm install
 ```
 
-For Bulma follow: https://github.com/svelte-add/bulma
-
-For Bulma theming follow: https://jenil.github.io/bulmaswatch/darkly/
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Dev Server
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+json-server --watch api.json
 ```
 
-## Building
-
-To create a production version of your app:
+### Build
 
 ```bash
 npm run build
+
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
